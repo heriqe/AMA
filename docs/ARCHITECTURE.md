@@ -1,6 +1,6 @@
 # Arquitetura do AMA
 
-**Versão do documento:** 0.2  
+**Versão do documento:** 0.3  
 **Status:** arquitetura inicial em implementação.
 
 ## 1. Visão geral
@@ -16,52 +16,51 @@ O desenvolvimento da inteligência própria começa pelo **Cognitive Core**. A *
 - **Memória:** armazena observações, avaliações e rastros de inferência com origem e data. Persistência não é, por si só, aprendizado.
 - **Raciocínio:** aplica regras explícitas e produz rastros estruturados contendo regra, premissas e conclusão.
 - **Planejamento:** decompõe objetivos em tarefas e dependências; o planejador atual valida ciclos e produz uma ordem topológica.
-- **Pipeline cognitivo:** conecta percepção → conhecimento → raciocínio → memória para observações estruturadas.
-- **Decisão:** futuramente compara alternativas sob restrições, orçamento e permissões.
-- **Execução:** futuramente executa somente ações autorizadas, com validação e registro.
+- **Decisão:** avalia alternativas declaradas sob orçamento, moeda, risco, evidência e requisitos de aprovação. O motor v0.3 recomenda ou se abstém; não executa.
+- **Execução:** futuramente executa somente ações autorizadas, com validação, sandbox e registro.
 - **Aprendizado:** futuramente avalia resultados e propõe atualizações controladas.
 - **ANA:** pesquisa independente de unidades neurais, dinâmica, conexões e aprendizado próprios.
 
-## 3. Fluxo cognitivo implementado no v0.2
+## 3. Fluxo cognitivo
 
 ```text
 Observação estruturada
         |
     Percepção
         |
-  Fatos validados
+  Conhecimento e política
         |
-  Política de conhecimento
-   |       |        |
- aceito  conflito  vencido/fraco
-   |       |        |
-   +---- fatos elegíveis
-              |
-       Raciocínio por regras
-              |
-       Rastro de inferência
-              |
-            Memória
+  Raciocínio determinístico
+        |
+  Memória e rastreabilidade
+        |
+  Planejamento de tarefas
+        |
+  Decisão sob restrições
+        |
+  (futura execução autorizada)
 ```
 
-Fatos conflitantes não são resolvidos por votação ou por maior confiança. O pipeline falha de forma conservadora para aquele predicado e não o disponibiliza ao motor de regras. A política usa um limiar configurável de confiança; esse valor é metadado da fonte, não uma probabilidade calibrada.
+O pipeline cognitivo v0.2 processa observações estruturadas e registra fatos, avaliações e inferências. O mecanismo de decisão v0.3 é um componente puro separado: recebe alternativas e orçamento declarados e produz avaliações sem executar ações.
 
-## 4. Decisões técnicas iniciais
+## 4. Decisões técnicas
 
 - Python 3.11+ como linguagem principal do núcleo.
 - SQLite para persistência local inicial.
 - Biblioteca padrão sempre que possível.
 - Pytest para testes automatizados.
-- NumPy poderá ser introduzido nos experimentos da ANA quando necessário; não é dependência do núcleo inicial.
+- ANA permanece independente do Cognitive Core até existir interface testada.
 - React será considerado posteriormente para um painel, não como dependência do núcleo.
-- Nenhuma chamada a LLM externo será necessária para executar os componentes desta fundação.
+- Nenhuma chamada a LLM externo é necessária para executar os componentes atuais.
 
 ## 5. Limites atuais
 
-O motor lógico manipula fatos explícitos e aplica regras cadastradas. A percepção valida estruturas de dados; não extrai significado de texto livre. A confiança de um fato é um metadado fornecido pela origem, não uma probabilidade calibrada nem prova de veracidade.
+A percepção valida estruturas de dados; não extrai significado de texto livre. A confiança de um fato é metadado fornecido pela origem, não probabilidade calibrada. O planejador ordena tarefas e detecta dependências inválidas; não avalia sozinho viabilidade econômica.
 
-O planejador ordena tarefas e detecta dependências inválidas; ele não avalia sozinho se um objetivo é economicamente viável. A memória atual é armazenamento persistente simples; armazenar dados não significa que o sistema aprendeu com eles. O pipeline processa até 10.000 fatos por ciclo por padrão e não executa planos nem ações externas.
+O motor de decisão usa somente projeções fornecidas. Sua pontuação é heurística, não previsão estatística nem garantia de lucro. A moeda precisa coincidir; dinheiro é representado por `Decimal`. Orçamento é limite de planejamento, não saldo bancário nem autorização para gastar. Candidatos que exigem aprovação humana não são selecionados automaticamente.
+
+Nenhum componente atual publica conteúdo, contrata serviços, transfere dinheiro ou assume compromissos externos.
 
 ## 6. Evolução
 
-Mudanças de arquitetura devem atualizar este documento e, quando relevantes, registrar uma decisão em `docs/decisions/`. Cada etapa precisa de testes e critérios de aceitação antes de avançar.
+Mudanças de arquitetura devem atualizar este documento e, quando relevantes, registrar uma decisão em `docs/decisions/`. Cada etapa precisa de testes, critérios de aceitação e limites conhecidos antes de avançar.

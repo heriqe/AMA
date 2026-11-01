@@ -1,26 +1,28 @@
 # Roadmap do AMA
 
-**Roadmap inicial — 2026-11-01**
+**Roadmap atualizado — 2026-11-01**
 
 O roadmap é incremental. Datas são referências, não promessas de entrega.
 
-## Fundação v0.1 — em andamento
+## Foundation v0.1 — concluída
 
-- [x] Criar estrutura inicial do repositório.
-- [x] Definir empacotamento Python.
-- [x] Criar tipos básicos do núcleo.
-- [x] Criar persistência local SQLite.
-- [x] Criar motor lógico determinístico mínimo.
-- [x] Adicionar testes automatizados.
-- [ ] Validar instalação e testes em ambiente local do mantenedor.
+- [x] Estrutura inicial do repositório e empacotamento Python.
+- [x] Tipos básicos do núcleo.
+- [x] Persistência local SQLite.
+- [x] Motor lógico determinístico mínimo.
+- [x] Testes automatizados e GitHub Actions.
+- [x] Integração na branch `main`; workflow da branch principal concluído com sucesso.
 
-## Cognitive Core v0.2
+## Cognitive Core v0.2 — em desenvolvimento
 
-- [ ] Modelo explícito de conhecimento: fatos, origem, confiança e validade.
-- [ ] Percepção e normalização de entradas estruturadas.
-- [ ] Raciocínio com encadeamento de regras e explicação das inferências.
-- [ ] Memória episódica e semântica com políticas de retenção.
-- [ ] Planejamento inicial com tarefas, dependências e critérios de conclusão.
+- [x] Modelo explícito de fatos com origem, confiança e validade temporal opcional.
+- [x] Persistência SQLite para conhecimento estruturado.
+- [x] Normalização e validação de observações estruturadas.
+- [x] Planejamento determinístico com dependências e detecção de ciclos.
+- [ ] Raciocínio com rastreabilidade estruturada das inferências.
+- [ ] Política explícita para fatos conflitantes, vencidos e de baixa confiança.
+- [ ] Integração entre percepção, conhecimento, memória e raciocínio.
+- [ ] Validar todos os testes na CI antes de integrar.
 
 ## Cognitive Core v0.3
 

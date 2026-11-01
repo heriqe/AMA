@@ -5,23 +5,41 @@ from __future__ import annotations
 import json
 import sqlite3
 from pathlib import Path
+from uuid import uuid4
 
 from ama.knowledge.models import Fact
 
 
 class SQLiteKnowledgeRepository:
-    """Persist facts while retaining provenance, confidence, and timestamps."""
+    """Persist facts while retaining provenance, confidence, and timestamps.
+
+    A shared in-memory SQLite database is supported for isolated tests and
+    short-lived experiments. Call close() to release its keeper connection.
+    """
 
     def __init__(self, database_path: str | Path) -> None:
-        self.database_path = str(database_path)
-        if self.database_path != ":memory:":
+        raw_path = str(database_path)
+        self._uri = raw_path == ":memory:"
+        self.database_path = (
+            f"file:ama_knowledge_{uuid4().hex}?mode=memory&cache=shared"
+            if self._uri
+            else raw_path
+        )
+        self._keeper: sqlite3.Connection | None = (
+            sqlite3.connect(self.database_path, uri=True) if self._uri else None
+        )
+        if not self._uri:
             Path(self.database_path).parent.mkdir(parents=True, exist_ok=True)
         self._initialize()
 
     def _connect(self) -> sqlite3.Connection:
-        connection = sqlite3.connect(self.database_path)
-        connection.row_factory = sqlite3.Row
-        return connection
+        return sqlite3.connect(self.database_path, uri=self._uri)
+
+    def close(self) -> None:
+        """Release the keeper connection for an in-memory database."""
+        if self._keeper is not None:
+            self._keeper.close()
+            self._keeper = None
 
     def _initialize(self) -> None:
         with self._connect() as connection:
@@ -56,7 +74,7 @@ class SQLiteKnowledgeRepository:
                 (
                     fact.fact_id,
                     fact.predicate,
-                    json.dumps(fact.value, ensure_ascii=False),
+                    json.dumps(fact.value, ensure_ascii=False, allow_nan=False),
                     fact.source,
                     fact.confidence,
                     fact.observed_at,

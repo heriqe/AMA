@@ -11,35 +11,38 @@ O roadmap é incremental. Datas são referências, não promessas de entrega.
 - [x] Persistência local SQLite.
 - [x] Motor lógico determinístico mínimo.
 - [x] Testes automatizados e GitHub Actions.
-- [x] Integração na branch `main`; workflow da branch principal concluído com sucesso.
+- [x] Integração na branch `main`.
 
-## Cognitive Core v0.2 — implementação no PR #2
+## Cognitive Core v0.2 — base integrada; complementos em revisão no PR #3
 
 - [x] Modelo explícito de fatos com origem, confiança e validade temporal opcional.
 - [x] Persistência SQLite para conhecimento estruturado.
 - [x] Normalização e validação de observações estruturadas.
 - [x] Planejamento determinístico com dependências e detecção de ciclos.
 - [x] Política explícita para fatos conflitantes, vencidos e de baixa confiança.
-- [x] Rastreabilidade estruturada de inferências (regra, premissas e conclusão).
+- [x] Rastreabilidade estruturada de inferências.
 - [x] Pipeline percepção → conhecimento → raciocínio → memória.
-- [ ] Validar todos os testes na CI após as últimas alterações.
-- [ ] Revisão final e integração aprovada na `main`.
+- [ ] Revisão e integração dos complementos na `main`.
 
-## Cognitive Core v0.3
+## Cognitive Core v0.3 — decisão inicial em revisão no PR #6
 
-- [ ] Decisão multicritério com orçamento, risco e incerteza.
-- [ ] Avaliação de resultados e registro de experiências.
-- [ ] Execução em sandbox, sem ações externas por padrão.
-- [ ] Auditoria e trilha de decisões.
-- [ ] Interfaces explícitas de autorização e limites operacionais.
+- [x] Modelo de orçamento com moeda explícita.
+- [x] Alternativas com receita projetada, custo estimado, risco e confiança de evidência.
+- [x] Restrições duras para orçamento, moeda, risco, evidência e aprovação humana.
+- [x] Pontuação normalizada e desempate determinístico.
+- [x] Abstenção quando nenhuma alternativa é elegível.
+- [ ] Avaliação de resultados reais e registro de experiências.
+- [ ] Sandbox e execução autorizada.
+- [ ] Auditoria persistente de decisões e limites operacionais.
 
 ## ANA — linha de pesquisa independente
 
-- [ ] ANA v0.1: especificação matemática da unidade neural.
-- [ ] ANA v0.2: dinâmica e propagação.
-- [ ] ANA v0.3: memória e contexto.
-- [ ] ANA v0.4: mecanismos de aprendizado e adaptação.
-- [ ] ANA v0.5: redes maiores e conexões dinâmicas.
+- [x] ANA v0.1: unidade neural matemática e protótipo isolado (PR #4).
+- [x] ANA v0.2: grafo dirigido recorrente e propagação síncrona (PR #5).
+- [ ] Revisão e integração das etapas v0.1/v0.2.
+- [ ] ANA v0.3: memória/contexto em múltiplas escalas.
+- [ ] ANA v0.4: aprendizado supervisionado, por recompensa e descoberta de padrões.
+- [ ] ANA v0.5: redes maiores e conexões dinâmicas com testes de estabilidade.
 - [ ] ANA 1.0: interface experimental para integração com o Cognitive Core.
 
 ## Plataforma AMA

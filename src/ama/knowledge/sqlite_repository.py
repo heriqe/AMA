@@ -33,7 +33,9 @@ class SQLiteKnowledgeRepository:
         self._initialize()
 
     def _connect(self) -> sqlite3.Connection:
-        return sqlite3.connect(self.database_path, uri=self._uri)
+        connection = sqlite3.connect(self.database_path, uri=self._uri)
+        connection.row_factory = sqlite3.Row
+        return connection
 
     def close(self) -> None:
         """Release the keeper connection for an in-memory database."""

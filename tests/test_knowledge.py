@@ -19,11 +19,27 @@ def test_fact_round_trips_with_provenance_and_confidence(tmp_path):
     assert repository.find("market") == [fact]
 
 
-def test_fact_rejects_invalid_confidence():
+def test_in_memory_repository_keeps_data_between_operations():
+    repository = SQLiteKnowledgeRepository(":memory:")
+    fact = Fact(predicate="status", value="active", source="test")
+
+    repository.add(fact)
+
+    assert repository.get(fact.fact_id) == fact
+    repository.close()
+
+
+@pytest.mark.parametrize("confidence", [-0.1, 1.1, float("nan"), True, "high"])
+def test_fact_rejects_invalid_confidence(confidence):
     with pytest.raises(ValueError, match="confidence"):
-        Fact(predicate="claim", value=True, source="test", confidence=1.5)
+        Fact(predicate="claim", value=True, source="test", confidence=confidence)
 
 
 def test_fact_rejects_non_json_value():
     with pytest.raises(ValueError, match="JSON serializable"):
         Fact(predicate="claim", value=object(), source="test")
+
+
+def test_fact_rejects_invalid_predicate_type():
+    with pytest.raises(ValueError, match="predicate"):
+        Fact(predicate=None, value=True, source="test")

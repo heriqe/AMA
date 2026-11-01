@@ -4,7 +4,7 @@ O **AMA** é um projeto experimental para construir uma plataforma própria de i
 
 A meta é desenvolver, em etapas verificáveis, um núcleo cognitivo independente de serviços externos de IA e, em uma linha de pesquisa separada, a **ANA (AMA Neural Architecture)**. A integração entre os dois só ocorrerá quando houver componentes testados e interfaces definidas.
 
-> **Estado atual:** Foundation v0.1 integrada à `main`; Cognitive Core v0.2 em desenvolvimento no PR #2. O AMA ainda não é um sistema autônomo de geração de renda e não deve ser usado para movimentar dinheiro, publicar conteúdo ou assumir compromissos externos.
+> **Estado atual:** Foundation v0.1 e Cognitive Core v0.2 integrados à `main`. A ANA v0.1 (unidade neural isolada) está em revisão no PR #4. A ANA v0.2, que tratará da dinâmica entre unidades, permanece em uma etapa separada e não faz parte deste PR. O AMA ainda não é um sistema autônomo de geração de renda e não deve ser usado para movimentar dinheiro, publicar conteúdo ou assumir compromissos externos.
 
 ## Princípios
 
@@ -24,8 +24,10 @@ AMA/
 │   ├── ARCHITECTURE.md
 │   ├── GOVERNANCE.md
 │   ├── ROADMAP.md
+│   ├── ana/            # especificações da ANA
 │   └── decisions/
 ├── src/ama/
+│   ├── ana/            # unidade neural experimental (v0.1)
 │   ├── core/           # contratos e pipeline cognitivo
 │   ├── knowledge/      # fatos, política de validade/conflito e SQLite
 │   ├── memory/         # registros persistentes
@@ -67,24 +69,17 @@ pytest
 
 | Componente | Estado |
 |---|---|
-| Fundação e empacotamento Python | Implementado |
-| Tipos básicos de entrada e resultado | Implementado |
-| Memória SQLite simples | Implementado |
-| Motor lógico determinístico mínimo | Implementado |
-| Fatos estruturados com origem e confiança | Implementado |
-| Política para fatos vencidos, fracos e conflitantes | Implementada no PR v0.2 |
-| Rastreabilidade estruturada de inferências | Implementada no PR v0.2 |
-| Fluxo percepção → conhecimento → raciocínio → memória | Implementado no PR v0.2 |
+| Fundação e empacotamento Python | Integrado |
+| Cognitive Core v0.2 — fatos, política, inferências e pipeline | Integrado |
+| ANA v0.1 — especificação matemática e unidade isolada | Em revisão no PR #4 |
+| ANA v0.2 — dinâmica e propagação entre unidades | Próxima etapa; fora do PR #4 |
 | Linguagem natural livre | Não implementada |
-| Aprendizado cognitivo | Pesquisa futura |
-| ANA / unidade neural | Especificação e experimentos futuros |
+| Aprendizado cognitivo/neural | Pesquisa futura |
 | Organização empresarial e agentes | Futuro |
 | Operação de negócios e integrações | Futuro, sujeita à governança |
 
-### Limites do Cognitive Core atual
+## Limites atuais
 
-A percepção aceita apenas observações estruturadas; não interpreta linguagem natural. A política de conhecimento usa confiança como metadado fornecido pela fonte, não como probabilidade calibrada. Quando valores elegíveis de um mesmo predicado divergem, o pipeline não escolhe um vencedor: marca conflito e impede que esse predicado alimente as regras. Fatos expirados ou abaixo do limiar configurado também não são usados.
-
-O pipeline registra observações, avaliações e disparos de regras na memória. Ele não executa tarefas, não verifica a verdade no mundo externo e não autoriza ações externas. O limite padrão de leitura do pipeline é de 10.000 fatos por ciclo.
+O Cognitive Core manipula observações estruturadas e regras determinísticas; não interpreta linguagem natural livre. A ANA v0.1 implementa uma transição numérica para uma unidade isolada; não implementa redes, propagação entre unidades, treinamento ou aprendizado. Nenhum desses componentes executa negócios ou ações externas.
 
 Consulte [docs/ROADMAP.md](docs/ROADMAP.md) para a sequência de desenvolvimento.

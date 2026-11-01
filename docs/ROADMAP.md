@@ -36,11 +36,12 @@ O roadmap é incremental. Datas são referências, não promessas de entrega.
 
 - [x] ANA v0.1: especificação matemática inicial da unidade neural (PR #4).
 - [x] ANA v0.1: protótipo isolado de transição e testes iniciais (PR #4).
-- [ ] Validar a implementação da unidade na CI e revisar os resultados.
-- [ ] ANA v0.2: dinâmica e propagação entre unidades.
-- [ ] ANA v0.3: memória e contexto em múltiplas escalas.
-- [ ] ANA v0.4: mecanismos de aprendizado supervisionado, por recompensa e descoberta de padrões.
-- [ ] ANA v0.5: redes maiores e conexões dinâmicas.
+- [x] ANA v0.2: especificação de grafo dirigido recorrente (PR #5).
+- [x] ANA v0.2: propagação síncrona e atualização a partir do estado anterior (PR #5).
+- [ ] Validar e integrar as versões v0.1 e v0.2 na `main`.
+- [ ] ANA v0.3: memória/contexto em múltiplas escalas.
+- [ ] ANA v0.4: aprendizado supervisionado, por recompensa e descoberta de padrões.
+- [ ] ANA v0.5: redes maiores e conexões dinâmicas, com testes de estabilidade.
 - [ ] ANA 1.0: interface experimental para integração com o Cognitive Core.
 
 ## Plataforma AMA

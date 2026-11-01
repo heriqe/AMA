@@ -11,8 +11,13 @@ Matrix = tuple[tuple[float, ...], ...]
 
 
 def _as_vector(values: tuple[float, ...], name: str, size: int) -> Vector:
-    if len(values) != size:
-        raise ValueError(f"{name} must have length {size}")
+    try:
+        if len(values) != size:
+            raise ValueError(f"{name} must have length {size}")
+    except TypeError as error:
+        raise ValueError(f"{name} must be a numeric vector") from error
+    if any(isinstance(value, bool) or not isinstance(value, (int, float)) for value in values):
+        raise ValueError(f"{name} must contain only numeric values")
     result = tuple(float(value) for value in values)
     if not all(math.isfinite(value) for value in result):
         raise ValueError(f"{name} must contain only finite numbers")
@@ -20,10 +25,18 @@ def _as_vector(values: tuple[float, ...], name: str, size: int) -> Vector:
 
 
 def _validate_matrix(matrix: Matrix, name: str, rows: int, columns: int) -> None:
-    if len(matrix) != rows or any(len(row) != columns for row in matrix):
+    try:
+        valid_shape = len(matrix) == rows and all(len(row) == columns for row in matrix)
+    except TypeError as error:
+        raise ValueError(f"{name} must be a numeric matrix") from error
+    if not valid_shape:
         raise ValueError(f"{name} must have shape ({rows}, {columns})")
-    if not all(math.isfinite(value) for row in matrix for value in row):
-        raise ValueError(f"{name} must contain only finite numbers")
+    values = (value for row in matrix for value in row)
+    for value in values:
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            raise ValueError(f"{name} must contain only numeric values")
+        if not math.isfinite(value):
+            raise ValueError(f"{name} must contain only finite numbers")
 
 
 def _matvec(matrix: Matrix, vector: Vector) -> Vector:
@@ -120,8 +133,10 @@ class NeuralUnitParameters:
             self.internal_size,
             self.output_size,
         )
-        if any(isinstance(size, bool) or not isinstance(size, int) or size < 1
-               for size in dimensions):
+        if any(
+            isinstance(size, bool) or not isinstance(size, int) or size < 1
+            for size in dimensions
+        ):
             raise ValueError("all dimensions must be positive integers")
 
         d, du, dr, dy = (
@@ -131,14 +146,22 @@ class NeuralUnitParameters:
             self.output_size,
         )
         shapes = {
-            "w_xx": (self.w_xx, d, d), "w_xm": (self.w_xm, d, d),
-            "w_xc": (self.w_xc, d, d), "w_xu": (self.w_xu, d, du),
-            "w_xr": (self.w_xr, d, dr), "w_cc": (self.w_cc, d, d),
-            "w_cx": (self.w_cx, d, d), "w_cr": (self.w_cr, d, dr),
-            "w_gx": (self.w_gx, d, d), "w_gc": (self.w_gc, d, d),
-            "w_gm": (self.w_gm, d, d), "w_mx": (self.w_mx, d, d),
-            "w_mc": (self.w_mc, d, d), "w_mu": (self.w_mu, d, du),
-            "w_yx": (self.w_yx, dy, d), "w_ym": (self.w_ym, dy, d),
+            "w_xx": (self.w_xx, d, d),
+            "w_xm": (self.w_xm, d, d),
+            "w_xc": (self.w_xc, d, d),
+            "w_xu": (self.w_xu, d, du),
+            "w_xr": (self.w_xr, d, dr),
+            "w_cc": (self.w_cc, d, d),
+            "w_cx": (self.w_cx, d, d),
+            "w_cr": (self.w_cr, d, dr),
+            "w_gx": (self.w_gx, d, d),
+            "w_gc": (self.w_gc, d, d),
+            "w_gm": (self.w_gm, d, d),
+            "w_mx": (self.w_mx, d, d),
+            "w_mc": (self.w_mc, d, d),
+            "w_mu": (self.w_mu, d, du),
+            "w_yx": (self.w_yx, dy, d),
+            "w_ym": (self.w_ym, dy, d),
             "w_yc": (self.w_yc, dy, d),
         }
         for name, (matrix, rows, columns) in shapes.items():
@@ -148,7 +171,11 @@ class NeuralUnitParameters:
             _as_vector(getattr(self, name), name, d)
         _as_vector(self.b_y, "b_y", dy)
 
-        for name, value in (("rho", self.rho), ("eta", self.eta), ("gamma", self.gamma)):
+        for name, value in (
+            ("rho", self.rho),
+            ("eta", self.eta),
+            ("gamma", self.gamma),
+        ):
             if isinstance(value, bool) or not isinstance(value, (int, float)):
                 raise ValueError(f"{name} must be numeric")
             if not math.isfinite(value):
@@ -180,14 +207,35 @@ class NeuralUnitParameters:
 
         zero = (0.0,) * d
         return cls(
-            input_size=du, relation_size=dr, internal_size=d, output_size=dy,
-            w_xx=matrix(d, d), w_xm=matrix(d, d), w_xc=matrix(d, d),
-            w_xu=matrix(d, du), w_xr=matrix(d, dr), b_x=zero,
-            w_cc=matrix(d, d), w_cx=matrix(d, d), w_cr=matrix(d, dr), b_c=zero,
-            w_gx=matrix(d, d), w_gc=matrix(d, d), w_gm=matrix(d, d), b_g=zero,
-            w_mx=matrix(d, d), w_mc=matrix(d, d), w_mu=matrix(d, du), b_m=zero,
-            w_yx=matrix(dy, d), w_ym=matrix(dy, d), w_yc=matrix(dy, d),
-            b_y=(0.0,) * dy, rho=rho, eta=eta, gamma=gamma,
+            input_size=du,
+            relation_size=dr,
+            internal_size=d,
+            output_size=dy,
+            w_xx=matrix(d, d),
+            w_xm=matrix(d, d),
+            w_xc=matrix(d, d),
+            w_xu=matrix(d, du),
+            w_xr=matrix(d, dr),
+            b_x=zero,
+            w_cc=matrix(d, d),
+            w_cx=matrix(d, d),
+            w_cr=matrix(d, dr),
+            b_c=zero,
+            w_gx=matrix(d, d),
+            w_gc=matrix(d, d),
+            w_gm=matrix(d, d),
+            b_g=zero,
+            w_mx=matrix(d, d),
+            w_mc=matrix(d, d),
+            w_mu=matrix(d, du),
+            b_m=zero,
+            w_yx=matrix(dy, d),
+            w_ym=matrix(dy, d),
+            w_yc=matrix(dy, d),
+            b_y=(0.0,) * dy,
+            rho=rho,
+            eta=eta,
+            gamma=gamma,
         )
 
 
@@ -203,8 +251,12 @@ def step(
     c_prev = _as_vector(state.c, "state.c", d)
     g_prev = _as_vector(state.g, "state.g", d)
     _as_vector(state.y, "state.y", parameters.output_size)
+    if any(value < 0.0 or value > 2.0 for value in g_prev):
+        raise ValueError("state.g values must be within [0, 2]")
     external = _as_vector(signals.external, "signals.external", parameters.input_size)
-    relational = _as_vector(signals.relational, "signals.relational", parameters.relation_size)
+    relational = _as_vector(
+        signals.relational, "signals.relational", parameters.relation_size
+    )
 
     px = _sum_vectors(
         _matvec(parameters.w_xx, x_prev),
@@ -216,12 +268,14 @@ def step(
     )
     x = _tanh(_hadamard(g_prev, px))
 
-    c = _tanh(_sum_vectors(
-        _matvec(parameters.w_cc, c_prev),
-        _matvec(parameters.w_cx, x),
-        _matvec(parameters.w_cr, relational),
-        parameters.b_c,
-    ))
+    c = _tanh(
+        _sum_vectors(
+            _matvec(parameters.w_cc, c_prev),
+            _matvec(parameters.w_cx, x),
+            _matvec(parameters.w_cr, relational),
+            parameters.b_c,
+        )
+    )
 
     modulation_signal = _sum_vectors(
         _matvec(parameters.w_gx, x),
@@ -231,22 +285,26 @@ def step(
     )
     g = tuple(1.0 + parameters.gamma * value for value in _tanh(modulation_signal))
 
-    memory_candidate = _tanh(_sum_vectors(
-        _matvec(parameters.w_mx, x),
-        _matvec(parameters.w_mc, c),
-        _matvec(parameters.w_mu, external),
-        parameters.b_m,
-    ))
+    memory_candidate = _tanh(
+        _sum_vectors(
+            _matvec(parameters.w_mx, x),
+            _matvec(parameters.w_mc, c),
+            _matvec(parameters.w_mu, external),
+            parameters.b_m,
+        )
+    )
     m = tuple(
         parameters.rho * previous + parameters.eta * gain * candidate
         for previous, gain, candidate in zip(m_prev, g, memory_candidate)
     )
 
-    y = _tanh(_sum_vectors(
-        _matvec(parameters.w_yx, x),
-        _matvec(parameters.w_ym, m),
-        _matvec(parameters.w_yc, c),
-        parameters.b_y,
-    ))
+    y = _tanh(
+        _sum_vectors(
+            _matvec(parameters.w_yx, x),
+            _matvec(parameters.w_ym, m),
+            _matvec(parameters.w_yc, c),
+            parameters.b_y,
+        )
+    )
 
     return NeuralUnitState(x=x, m=m, c=c, g=g, y=y)

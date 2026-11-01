@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import math
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any
@@ -10,9 +11,11 @@ from uuid import uuid4
 
 
 def _validate_timestamp(value: str, field_name: str) -> None:
+    if not isinstance(value, str):
+        raise ValueError(f"{field_name} must be an ISO-8601 timestamp")
     try:
         datetime.fromisoformat(value.replace("Z", "+00:00"))
-    except (TypeError, ValueError) as error:
+    except ValueError as error:
         raise ValueError(f"{field_name} must be an ISO-8601 timestamp") from error
 
 
@@ -35,18 +38,23 @@ class Fact:
     valid_until: str | None = None
 
     def __post_init__(self) -> None:
-        if not self.predicate.strip():
-            raise ValueError("predicate must not be empty")
-        if not self.source.strip():
-            raise ValueError("source must not be empty")
-        if not self.fact_id.strip():
-            raise ValueError("fact_id must not be empty")
-        if isinstance(self.confidence, bool) or not 0.0 <= self.confidence <= 1.0:
-            raise ValueError("confidence must be a number between 0 and 1")
+        if not isinstance(self.predicate, str) or not self.predicate.strip():
+            raise ValueError("predicate must be a non-empty string")
+        if not isinstance(self.source, str) or not self.source.strip():
+            raise ValueError("source must be a non-empty string")
+        if not isinstance(self.fact_id, str) or not self.fact_id.strip():
+            raise ValueError("fact_id must be a non-empty string")
+        if (
+            isinstance(self.confidence, bool)
+            or not isinstance(self.confidence, (int, float))
+            or not math.isfinite(self.confidence)
+            or not 0.0 <= self.confidence <= 1.0
+        ):
+            raise ValueError("confidence must be a finite number between 0 and 1")
         _validate_timestamp(self.observed_at, "observed_at")
         if self.valid_until is not None:
             _validate_timestamp(self.valid_until, "valid_until")
         try:
-            json.dumps(self.value, ensure_ascii=False)
+            json.dumps(self.value, ensure_ascii=False, allow_nan=False)
         except (TypeError, ValueError) as error:
             raise ValueError("fact value must be JSON serializable") from error

@@ -1,7 +1,7 @@
 # Arquitetura do AMA
 
-**Versão do documento:** 0.1  
-**Status:** arquitetura inicial; sujeita a revisão por decisões documentadas.
+**Versão do documento:** 0.2  
+**Status:** arquitetura inicial em implementação.
 
 ## 1. Visão geral
 
@@ -9,40 +9,40 @@ O AMA será desenvolvido como um monólito modular no início. Os módulos terã
 
 O desenvolvimento da inteligência própria começa pelo **Cognitive Core**. A **ANA** será uma linha de pesquisa independente e será integrada depois, por uma interface explícita.
 
-## 2. Camadas planejadas
+## 2. Camadas
 
-- **Percepção:** normalizar entradas e identificar informações relevantes.
-- **Conhecimento:** representar fatos, conceitos, fontes e grau de confiança.
-- **Memória:** armazenar experiências, fatos e registros com origem e data.
-- **Raciocínio:** aplicar regras explícitas e inferências verificáveis.
-- **Planejamento:** decompor objetivos em tarefas e dependências.
-- **Decisão:** comparar alternativas sob restrições e permissões.
-- **Execução:** executar somente ações autorizadas, com validação e registro.
-- **Aprendizado:** avaliar resultados e propor atualizações controladas.
-- **ANA:** pesquisa de unidades neurais, dinâmica, conexões e aprendizado próprios.
+- **Percepção:** valida e normaliza entradas estruturadas. A implementação atual não interpreta linguagem natural livre.
+- **Conhecimento:** representa fatos explícitos, origem, confiança informada e validade temporal opcional.
+- **Memória:** armazena experiências e registros com origem e data. Persistência não é, por si só, aprendizado.
+- **Raciocínio:** aplica regras explícitas e inferências verificáveis.
+- **Planejamento:** decompõe objetivos em tarefas e dependências; o planejador atual valida ciclos e produz uma ordem topológica.
+- **Decisão:** futuramente compara alternativas sob restrições, orçamento e permissões.
+- **Execução:** futuramente executa somente ações autorizadas, com validação e registro.
+- **Aprendizado:** futuramente avalia resultados e propõe atualizações controladas.
+- **ANA:** pesquisa independente de unidades neurais, dinâmica, conexões e aprendizado próprios.
 
 ## 3. Fluxo conceitual
 
 ```text
-Entrada
-  |
-Percepção -> Conhecimento <-> Memória
-  |                         |
-  +------> Raciocínio <-----+
-               |
-           Planejamento
-               |
-            Decisão <---- Governança
-               |
-       Execução autorizada
-               |
-       Resultado e auditoria
-               |
-       Avaliação / aprendizado
+Entrada estruturada
+        |
+    Percepção ------> Conhecimento <----> Memória
+        |                  |
+        +--------------> Raciocínio
+                             |
+                         Planejamento
+                             |
+                          Decisão <---- Governança
+                             |
+                    Execução autorizada
+                             |
+                     Resultado e auditoria
+                             |
+                    Avaliação / aprendizado
 
 ANA (linha independente de pesquisa)
-               |
-     integração futura por interface
+        |
+integração futura por interface testada
 ```
 
 ## 4. Decisões técnicas iniciais
@@ -57,9 +57,9 @@ ANA (linha independente de pesquisa)
 
 ## 5. Limites atuais
 
-O motor lógico inicial não é um modelo de linguagem nem possui compreensão geral. Ele manipula estruturas explícitas e aplica regras cadastradas. Não deve ser descrito como equivalente a um sistema conversacional avançado.
+O motor lógico manipula fatos explícitos e aplica regras cadastradas. A percepção valida estruturas de dados; não extrai significado de texto livre. A confiança de um fato é um metadado fornecido pela origem, não uma probabilidade calibrada nem prova de veracidade.
 
-A memória atual é armazenamento persistente simples; armazenar dados não significa que o sistema aprendeu com eles.
+O planejador ordena tarefas e detecta dependências inválidas; ele não avalia sozinho se um objetivo é economicamente viável. A memória atual é armazenamento persistente simples; armazenar dados não significa que o sistema aprendeu com eles.
 
 ## 6. Evolução
 

@@ -128,7 +128,14 @@ def test_duplicate_candidate_ids_are_rejected():
 
 def test_money_rejects_float_and_non_finite_values():
     with pytest.raises(ValueError, match="Decimal, int"):
-        candidate("float", revenue=1.5)
+        Alternative(
+            alternative_id="float",
+            description="Invalid float amount",
+            projected_revenue=1.5,
+            estimated_cost=Decimal("1"),
+            risk_score=0.1,
+            evidence_confidence=0.9,
+        )
     with pytest.raises(ValueError, match="finite"):
         DecisionBudget(Decimal("Infinity"))
 

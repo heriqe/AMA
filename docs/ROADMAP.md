@@ -11,19 +11,18 @@ O roadmap é incremental. Datas são referências, não promessas de entrega.
 - [x] Persistência local SQLite.
 - [x] Motor lógico determinístico mínimo.
 - [x] Testes automatizados e GitHub Actions.
-- [x] Integração na branch `main`; workflow da branch principal concluído com sucesso.
+- [x] Integração na branch `main`.
 
-## Cognitive Core v0.2 — implementação no PR #2
+## Cognitive Core v0.2 — integrada
 
 - [x] Modelo explícito de fatos com origem, confiança e validade temporal opcional.
 - [x] Persistência SQLite para conhecimento estruturado.
 - [x] Normalização e validação de observações estruturadas.
 - [x] Planejamento determinístico com dependências e detecção de ciclos.
 - [x] Política explícita para fatos conflitantes, vencidos e de baixa confiança.
-- [x] Rastreabilidade estruturada de inferências (regra, premissas e conclusão).
+- [x] Rastreabilidade estruturada de inferências.
 - [x] Pipeline percepção → conhecimento → raciocínio → memória.
-- [ ] Validar todos os testes na CI após as últimas alterações.
-- [ ] Revisão final e integração aprovada na `main`.
+- [x] Integração na `main` após revisão e testes.
 
 ## Cognitive Core v0.3
 
@@ -35,11 +34,13 @@ O roadmap é incremental. Datas são referências, não promessas de entrega.
 
 ## ANA — linha de pesquisa independente
 
-- [ ] ANA v0.1: especificação matemática da unidade neural.
-- [ ] ANA v0.2: dinâmica e propagação.
-- [ ] ANA v0.3: memória e contexto.
-- [ ] ANA v0.4: mecanismos de aprendizado e adaptação.
-- [ ] ANA v0.5: redes maiores e conexões dinâmicas.
+- [x] ANA v0.1: especificação matemática da unidade neural.
+- [x] ANA v0.1: protótipo de transição de uma unidade isolada.
+- [ ] Revisão e integração da ANA v0.1 na `main` (PR #4).
+- [ ] ANA v0.2: dinâmica entre unidades, conexões e propagação síncrona.
+- [ ] ANA v0.3: memória/contexto em múltiplas escalas.
+- [ ] ANA v0.4: aprendizado supervisionado, por recompensa e descoberta de padrões.
+- [ ] ANA v0.5: redes maiores e conexões dinâmicas, com testes de estabilidade.
 - [ ] ANA 1.0: interface experimental para integração com o Cognitive Core.
 
 ## Plataforma AMA

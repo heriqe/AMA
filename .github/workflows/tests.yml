@@ -2,7 +2,7 @@ name: Tests
 
 on:
   push:
-    branches: ["main", "foundation/**"]
+    branches: ["main", "foundation/**", "cognitive-core/**", "decision-engine/**"]
   pull_request:
     branches: ["main"]
 

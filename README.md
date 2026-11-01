@@ -4,7 +4,7 @@ O **AMA** é um projeto experimental para construir uma plataforma própria de i
 
 A meta é desenvolver, em etapas verificáveis, um núcleo cognitivo independente de serviços externos de IA e, em uma linha de pesquisa separada, a **ANA (AMA Neural Architecture)**. A integração entre os dois só ocorrerá quando houver componentes testados e interfaces definidas.
 
-> **Estado atual:** Foundation v0.1 integrada à `main`; Cognitive Core v0.2 em desenvolvimento no PR #2. O AMA ainda não é um sistema autônomo de geração de renda e não deve ser usado para movimentar dinheiro, publicar conteúdo ou assumir compromissos externos.
+> **Estado atual:** Foundation v0.1 integrada à `main`; complementos do Cognitive Core v0.2 estão em revisão no PR #3; a ANA v0.1 está em revisão no PR #4 e a ANA v0.2 está em revisão no PR #5; o mecanismo de decisão do Cognitive Core v0.3 está em revisão no PR #6. O AMA ainda não é um sistema autônomo de geração de renda e não deve ser usado para movimentar dinheiro, publicar conteúdo ou assumir compromissos externos.
 
 ## Princípios
 
@@ -24,9 +24,12 @@ AMA/
 │   ├── ARCHITECTURE.md
 │   ├── GOVERNANCE.md
 │   ├── ROADMAP.md
-│   └── decisions/
+│   ├── decisions/
+│   └── ana/
 ├── src/ama/
+│   ├── ana/            # unidade neural e rede experimental
 │   ├── core/           # contratos e pipeline cognitivo
+│   ├── decision/       # avaliação determinística de alternativas
 │   ├── knowledge/      # fatos, política de validade/conflito e SQLite
 │   ├── memory/         # registros persistentes
 │   ├── perception/     # validação de entradas estruturadas
@@ -67,24 +70,18 @@ pytest
 
 | Componente | Estado |
 |---|---|
-| Fundação e empacotamento Python | Implementado |
-| Tipos básicos de entrada e resultado | Implementado |
-| Memória SQLite simples | Implementado |
-| Motor lógico determinístico mínimo | Implementado |
-| Fatos estruturados com origem e confiança | Implementado |
-| Política para fatos vencidos, fracos e conflitantes | Implementada no PR v0.2 |
-| Rastreabilidade estruturada de inferências | Implementada no PR v0.2 |
-| Fluxo percepção → conhecimento → raciocínio → memória | Implementado no PR v0.2 |
+| Fundação e empacotamento Python | Integrado |
+| Cognitive Core v0.2 — fatos, política, inferências e pipeline | Em revisão no PR #3 |
+| ANA v0.1 — unidade matemática e protótipo | Em revisão no PR #4 |
+| ANA v0.2 — rede recorrente e propagação síncrona | Em revisão no PR #5 |
+| Cognitive Core v0.3 — decisão sob orçamento e risco | Em revisão no PR #6 |
 | Linguagem natural livre | Não implementada |
-| Aprendizado cognitivo | Pesquisa futura |
-| ANA / unidade neural | Especificação e experimentos futuros |
+| Aprendizado cognitivo/neural | Pesquisa futura |
 | Organização empresarial e agentes | Futuro |
 | Operação de negócios e integrações | Futuro, sujeita à governança |
 
-### Limites do Cognitive Core atual
+## Limites atuais
 
-A percepção aceita apenas observações estruturadas; não interpreta linguagem natural. A política de conhecimento usa confiança como metadado fornecido pela fonte, não como probabilidade calibrada. Quando valores elegíveis de um mesmo predicado divergem, o pipeline não escolhe um vencedor: marca conflito e impede que esse predicado alimente as regras. Fatos expirados ou abaixo do limiar configurado também não são usados.
-
-O pipeline registra observações, avaliações e disparos de regras na memória. Ele não executa tarefas, não verifica a verdade no mundo externo e não autoriza ações externas. O limite padrão de leitura do pipeline é de 10.000 fatos por ciclo.
+O Cognitive Core manipula observações estruturadas e regras determinísticas; não interpreta linguagem natural livre. O mecanismo de decisão v0.3 apenas compara estimativas fornecidas, com restrições explícitas, e não executa ações. A ANA v0.1/v0.2 é uma implementação experimental de unidade e propagação numérica; não implementa aprendizado ou linguagem natural. Nenhum desses componentes opera negócios ou movimenta dinheiro.
 
 Consulte [docs/ROADMAP.md](docs/ROADMAP.md) para a sequência de desenvolvimento.

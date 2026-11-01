@@ -13,16 +13,16 @@ O roadmap é incremental. Datas são referências, não promessas de entrega.
 - [x] Testes automatizados e GitHub Actions.
 - [x] Integração na branch `main`; workflow da branch principal concluído com sucesso.
 
-## Cognitive Core v0.2 — em desenvolvimento
+## Cognitive Core v0.2 — base integrada; complementos em revisão no PR #3
 
 - [x] Modelo explícito de fatos com origem, confiança e validade temporal opcional.
 - [x] Persistência SQLite para conhecimento estruturado.
 - [x] Normalização e validação de observações estruturadas.
 - [x] Planejamento determinístico com dependências e detecção de ciclos.
-- [ ] Raciocínio com rastreabilidade estruturada das inferências.
 - [ ] Política explícita para fatos conflitantes, vencidos e de baixa confiança.
-- [ ] Integração entre percepção, conhecimento, memória e raciocínio.
-- [ ] Validar todos os testes na CI antes de integrar.
+- [ ] Rastreabilidade estruturada de inferências.
+- [ ] Pipeline percepção → conhecimento → raciocínio → memória.
+- [ ] Revisão e integração dos complementos na `main`.
 
 ## Cognitive Core v0.3
 
@@ -30,13 +30,16 @@ O roadmap é incremental. Datas são referências, não promessas de entrega.
 - [ ] Avaliação de resultados e registro de experiências.
 - [ ] Execução em sandbox, sem ações externas por padrão.
 - [ ] Auditoria e trilha de decisões.
+- [ ] Interfaces explícitas de autorização e limites operacionais.
 
 ## ANA — linha de pesquisa independente
 
-- [ ] ANA v0.1: especificação matemática da unidade neural.
-- [ ] ANA v0.2: dinâmica e propagação.
-- [ ] ANA v0.3: memória e contexto.
-- [ ] ANA v0.4: mecanismos de aprendizado e adaptação.
+- [x] ANA v0.1: especificação matemática inicial da unidade neural (PR #4).
+- [x] ANA v0.1: protótipo isolado de transição e testes iniciais (PR #4).
+- [ ] Validar a implementação da unidade na CI e revisar os resultados.
+- [ ] ANA v0.2: dinâmica e propagação entre unidades.
+- [ ] ANA v0.3: memória e contexto em múltiplas escalas.
+- [ ] ANA v0.4: mecanismos de aprendizado supervisionado, por recompensa e descoberta de padrões.
 - [ ] ANA v0.5: redes maiores e conexões dinâmicas.
 - [ ] ANA 1.0: interface experimental para integração com o Cognitive Core.
 

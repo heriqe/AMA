@@ -4,7 +4,7 @@ O **AMA** é um projeto experimental para construir uma plataforma própria de i
 
 A meta é desenvolver, em etapas verificáveis, um núcleo cognitivo independente de serviços externos de IA e, em uma linha de pesquisa separada, a **ANA (AMA Neural Architecture)**. A integração entre os dois só ocorrerá quando houver componentes testados e interfaces definidas.
 
-> **Estado atual:** Foundation v0.1 — estrutura inicial e primeiros componentes determinísticos. O AMA ainda não é um sistema autônomo de geração de renda e não deve ser usado para movimentar dinheiro, publicar conteúdo ou assumir compromissos externos.
+> **Estado atual:** Foundation v0.1 integrada à `main`; Cognitive Core v0.2 em desenvolvimento. O AMA ainda não é um sistema autônomo de geração de renda e não deve ser usado para movimentar dinheiro, publicar conteúdo ou assumir compromissos externos.
 
 ## Princípios
 
@@ -19,20 +19,21 @@ A meta é desenvolver, em etapas verificáveis, um núcleo cognitivo independent
 
 ```text
 AMA/
+├── .github/workflows/tests.yml
 ├── docs/
 │   ├── ARCHITECTURE.md
 │   ├── GOVERNANCE.md
-│   └── ROADMAP.md
+│   ├── ROADMAP.md
+│   └── decisions/
 ├── src/ama/
-│   ├── core/
-│   │   └── types.py
-│   ├── memory/
-│   │   └── sqlite_store.py
-│   └── reasoning/
-│       └── rules.py
+│   ├── core/           # contratos compartilhados
+│   ├── knowledge/      # fatos, origem, confiança e SQLite
+│   ├── memory/         # registros persistentes
+│   ├── perception/     # validação de entradas estruturadas
+│   ├── planning/       # planos e dependências de tarefas
+│   └── reasoning/      # regras determinísticas
 ├── tests/
-├── pyproject.toml
-└── README.md
+└── pyproject.toml
 ```
 
 ## Requisitos
@@ -66,11 +67,14 @@ pytest
 
 | Componente | Estado |
 |---|---|
-| Fundação e empacotamento Python | Inicial |
+| Fundação e empacotamento Python | Implementado |
 | Tipos básicos de entrada e resultado | Implementado |
-| Memória SQLite local | Implementado |
+| Memória SQLite simples | Implementado |
 | Motor lógico determinístico mínimo | Implementado |
-| Planejador e decisor | Planejados |
+| Fatos estruturados com origem e confiança | Em implementação v0.2 |
+| Normalização de observações estruturadas | Em implementação v0.2 |
+| Planejamento com dependências e detecção de ciclos | Em implementação v0.2 |
+| Linguagem natural livre | Não implementada |
 | Aprendizado cognitivo | Pesquisa futura |
 | ANA / unidade neural | Especificação e experimentos futuros |
 | Organização empresarial e agentes | Futuro |

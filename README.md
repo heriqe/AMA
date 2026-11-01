@@ -4,7 +4,7 @@ O **AMA** é um projeto experimental para construir uma plataforma própria de i
 
 A meta é desenvolver, em etapas verificáveis, um núcleo cognitivo independente de serviços externos de IA e, em uma linha de pesquisa separada, a **ANA (AMA Neural Architecture)**. A integração entre os dois só ocorrerá quando houver componentes testados e interfaces definidas.
 
-> **Estado atual:** Foundation v0.1 integrada à `main`; Cognitive Core v0.2 em desenvolvimento. O AMA ainda não é um sistema autônomo de geração de renda e não deve ser usado para movimentar dinheiro, publicar conteúdo ou assumir compromissos externos.
+> **Estado atual:** Foundation v0.1 integrada à `main`; Cognitive Core v0.2 em desenvolvimento no PR #2. O AMA ainda não é um sistema autônomo de geração de renda e não deve ser usado para movimentar dinheiro, publicar conteúdo ou assumir compromissos externos.
 
 ## Princípios
 
@@ -26,12 +26,12 @@ AMA/
 │   ├── ROADMAP.md
 │   └── decisions/
 ├── src/ama/
-│   ├── core/           # contratos compartilhados
-│   ├── knowledge/      # fatos, origem, confiança e SQLite
+│   ├── core/           # contratos e pipeline cognitivo
+│   ├── knowledge/      # fatos, política de validade/conflito e SQLite
 │   ├── memory/         # registros persistentes
 │   ├── perception/     # validação de entradas estruturadas
 │   ├── planning/       # planos e dependências de tarefas
-│   └── reasoning/      # regras determinísticas
+│   └── reasoning/      # regras e rastreabilidade de inferências
 ├── tests/
 └── pyproject.toml
 ```
@@ -71,13 +71,20 @@ pytest
 | Tipos básicos de entrada e resultado | Implementado |
 | Memória SQLite simples | Implementado |
 | Motor lógico determinístico mínimo | Implementado |
-| Fatos estruturados com origem e confiança | Em implementação v0.2 |
-| Normalização de observações estruturadas | Em implementação v0.2 |
-| Planejamento com dependências e detecção de ciclos | Em implementação v0.2 |
+| Fatos estruturados com origem e confiança | Implementado |
+| Política para fatos vencidos, fracos e conflitantes | Implementada no PR v0.2 |
+| Rastreabilidade estruturada de inferências | Implementada no PR v0.2 |
+| Fluxo percepção → conhecimento → raciocínio → memória | Implementado no PR v0.2 |
 | Linguagem natural livre | Não implementada |
 | Aprendizado cognitivo | Pesquisa futura |
 | ANA / unidade neural | Especificação e experimentos futuros |
 | Organização empresarial e agentes | Futuro |
 | Operação de negócios e integrações | Futuro, sujeita à governança |
+
+### Limites do Cognitive Core atual
+
+A percepção aceita apenas observações estruturadas; não interpreta linguagem natural. A política de conhecimento usa confiança como metadado fornecido pela fonte, não como probabilidade calibrada. Quando valores elegíveis de um mesmo predicado divergem, o pipeline não escolhe um vencedor: marca conflito e impede que esse predicado alimente as regras. Fatos expirados ou abaixo do limiar configurado também não são usados.
+
+O pipeline registra observações, avaliações e disparos de regras na memória. Ele não executa tarefas, não verifica a verdade no mundo externo e não autoriza ações externas. O limite padrão de leitura do pipeline é de 10.000 fatos por ciclo.
 
 Consulte [docs/ROADMAP.md](docs/ROADMAP.md) para a sequência de desenvolvimento.

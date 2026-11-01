@@ -13,16 +13,17 @@ O roadmap é incremental. Datas são referências, não promessas de entrega.
 - [x] Testes automatizados e GitHub Actions.
 - [x] Integração na branch `main`; workflow da branch principal concluído com sucesso.
 
-## Cognitive Core v0.2 — em desenvolvimento
+## Cognitive Core v0.2 — implementação no PR #2
 
 - [x] Modelo explícito de fatos com origem, confiança e validade temporal opcional.
 - [x] Persistência SQLite para conhecimento estruturado.
 - [x] Normalização e validação de observações estruturadas.
 - [x] Planejamento determinístico com dependências e detecção de ciclos.
-- [ ] Raciocínio com rastreabilidade estruturada das inferências.
-- [ ] Política explícita para fatos conflitantes, vencidos e de baixa confiança.
-- [ ] Integração entre percepção, conhecimento, memória e raciocínio.
-- [ ] Validar todos os testes na CI antes de integrar.
+- [x] Política explícita para fatos conflitantes, vencidos e de baixa confiança.
+- [x] Rastreabilidade estruturada de inferências (regra, premissas e conclusão).
+- [x] Pipeline percepção → conhecimento → raciocínio → memória.
+- [ ] Validar todos os testes na CI após as últimas alterações.
+- [ ] Revisão final e integração aprovada na `main`.
 
 ## Cognitive Core v0.3
 
@@ -30,6 +31,7 @@ O roadmap é incremental. Datas são referências, não promessas de entrega.
 - [ ] Avaliação de resultados e registro de experiências.
 - [ ] Execução em sandbox, sem ações externas por padrão.
 - [ ] Auditoria e trilha de decisões.
+- [ ] Interfaces explícitas de autorização e limites operacionais.
 
 ## ANA — linha de pesquisa independente
 

@@ -43,8 +43,8 @@ def run_plasticity_benchmark(steps_per_phase: int = 40) -> BenchmarkReport:
     """Compare fixed, weight-only, and structural plasticity on four phases.
 
     Phases have target correlations (+1, -1, 0, +1). Activities are deterministic
-    and bounded. All variants start with weight 0.05; the structural variant
-    starts with its candidate inactive, so its activation delay is visible.
+    and bounded. The fixed and weight-only baselines start at 0.05. The structural candidate
+    starts inactive and receives 0.05 only after its activation delay.
     """
     if isinstance(steps_per_phase, bool) or not isinstance(steps_per_phase, int):
         raise ValueError("steps_per_phase must be an integer")

@@ -50,7 +50,7 @@ from ama.ana.temporal import (
     MultiScaleMemoryState,
     step_multiscale_memory,
 )
-from ama.ana.unit import (
+from ama.ana.unit_learning import (\n    UnitLearningPolicy,\n    UnitLearningResult,\n    supervised_unit_output_step,\n)\nfrom ama.ana.unit import (
     NeuralUnitInput,
     NeuralUnitParameters,
     NeuralUnitState,
@@ -81,7 +81,7 @@ __all__ = [
     "NodeState",
     "NeuralUnitInput",
     "NeuralUnitParameters",
-    "NeuralUnitState",
+    "NeuralUnitState",\n    "UnitLearningPolicy",\n    "UnitLearningResult",
     "NoiseBenchmarkReport",
     "NoiseBenchmarkVariant",
     "PlasticConnection",
@@ -99,5 +99,5 @@ __all__ = [
     "step_multiscale_memory",
     "step_network",
     "step_plasticity",
-    "supervised_step",
+    "supervised_step",\n    "supervised_unit_output_step",
 ]

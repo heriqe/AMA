@@ -16,6 +16,12 @@ from ama.ana.network import (
     NodeState,
     step_network,
 )
+from ama.ana.plasticity import (
+    PlasticConnection,
+    PlasticityParameters,
+    PlasticityState,
+    step_plasticity,
+)
 from ama.ana.temporal import (
     MultiScaleMemoryParameters,
     MultiScaleMemoryResult,
@@ -44,10 +50,14 @@ __all__ = [
     "NeuralUnitInput",
     "NeuralUnitParameters",
     "NeuralUnitState",
+    "PlasticConnection",
+    "PlasticityParameters",
+    "PlasticityState",
     "autonomous_step",
     "reward_step",
     "step",
     "step_multiscale_memory",
     "step_network",
+    "step_plasticity",
     "supervised_step",
 ]

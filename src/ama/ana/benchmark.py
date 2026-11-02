@@ -118,12 +118,13 @@ def run_plasticity_benchmark(steps_per_phase: int = 40) -> BenchmarkReport:
         if not all(math.isfinite(float(metrics[key])) for key in ("error", "magnitude")):
             raise RuntimeError("benchmark produced non-finite metrics")
         if name == "structural":
-            final = structural.connections[0]
+            final_weight = structural.connections[0].weight
+            final_active = structural.connections[0].active
             activations = transitions[name]["activate"]
             deactivations = transitions[name]["deactivate"]
         else:
             final_weight = fixed_weight if name == "fixed" else weight_only
-            final = type("FinalEdge", (), {"weight": final_weight, "active": True})()
+            final_active = True
             activations = 0
             deactivations = 0
         variants.append(
@@ -134,8 +135,8 @@ def run_plasticity_benchmark(steps_per_phase: int = 40) -> BenchmarkReport:
                 active_step_fraction=metrics["active"] / count,
                 activations=activations,
                 deactivations=deactivations,
-                final_weight=final.weight,
-                final_active=final.active,
+                final_weight=final_weight,
+                final_active=final_active,
             )
         )
 

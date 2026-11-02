@@ -1,6 +1,6 @@
 import pytest
 
-from ama.ana.forecast import run_forecast_benchmark
+from ama.ana.forecast import run_forecast_benchmark, run_forecast_suite
 
 
 def test_forecast_benchmark_is_deterministic():
@@ -45,3 +45,48 @@ def test_invalid_evaluation_steps_are_rejected(steps):
 def test_invalid_seed_is_rejected(seed):
     with pytest.raises(ValueError, match="seed"):
         run_forecast_benchmark(seed=seed)
+
+
+def test_forecast_suite_is_reproducible_and_preserves_paired_runs():
+    seeds = (3, 7, 11)
+    report = run_forecast_suite(seeds, train_steps=40, evaluation_steps=25)
+    assert report == run_forecast_suite(seeds, train_steps=40, evaluation_steps=25)
+    assert report.seeds == seeds
+    assert tuple(item.seed for item in report.reports) == seeds
+    assert tuple(item.name for item in report.aggregates) == (
+        "fixed",
+        "weight_only",
+        "structural",
+    )
+    assert all(item.std_mse >= 0.0 and item.std_mae >= 0.0 for item in report.aggregates)
+
+
+def test_forecast_suite_uses_population_mean_and_standard_deviation():
+    report = run_forecast_suite((3, 7, 11), train_steps=40, evaluation_steps=25)
+    for aggregate in report.aggregates:
+        values = tuple(
+            next(v for v in run.variants if v.name == aggregate.name).mean_squared_error
+            for run in report.reports
+        )
+        expected_mean = sum(values) / len(values)
+        expected_std = (
+            sum((value - expected_mean) ** 2 for value in values) / len(values)
+        ) ** 0.5
+        assert aggregate.mean_mse == pytest.approx(expected_mean)
+        assert aggregate.std_mse == pytest.approx(expected_std)
+
+
+@pytest.mark.parametrize(
+    "seeds",
+    [(), [], (1, 1), (True, 2), (1, 2.5), "1,2"],
+)
+def test_forecast_suite_rejects_invalid_seed_collections(seeds):
+    with pytest.raises(ValueError, match="seeds"):
+        run_forecast_suite(seeds)
+
+
+def test_forecast_suite_reports_baseline_aggregate():
+    report = run_forecast_suite((3, 7, 11), train_steps=40, evaluation_steps=25)
+    values = tuple(item.persistence_baseline_mse for item in report.reports)
+    assert report.mean_persistence_mse == pytest.approx(sum(values) / len(values))
+    assert report.std_persistence_mse >= 0.0

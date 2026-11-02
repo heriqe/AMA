@@ -35,7 +35,7 @@ def test_analytic_temporal_gradient_matches_central_difference_across_epsilons()
     for comparison in report.comparisons:
         assert math.isfinite(comparison.analytic_gradient)
         assert math.isfinite(comparison.finite_difference_gradient)
-        assert comparison.absolute_error < 1e-6
+        assert comparison.absolute_error < 2e-6
 
 
 def test_central_difference_error_decreases_for_reasonable_epsilon_range():

@@ -149,20 +149,20 @@ def run_forecast_benchmark(
         initial_weight=0.05,
     )
 
-    definitions = {
-        "fixed": {"weight": 0.05, "active": True},
-        "weight_only": {"weight": 0.05, "active": True},
-        "structural": {"weight": 0.0, "active": False},
+    states = {
+        name: NetworkState.initial(_network(0.05, True))
+        for name in ("fixed", "weight_only", "structural")
     }
-    states = {name: NetworkState.initial(_network(item["weight"], item["active"]))
-              for name, item in definitions.items()}
-    readouts = {name: LearningState.initial((0.0,) * 7) for name in definitions}
-    plastic = {
-        "weight_only": PlasticityState.initial((("sensor", "integrator"),), (0.05,)),
-        "structural": PlasticityState.initial((("sensor", "integrator"),)),
+    readouts = {
+        name: LearningState.initial((0.0,) * 7)
+        for name in ("fixed", "weight_only", "structural")
     }
-    errors = {name: {"squared": 0.0, "absolute": 0.0, "count": 0}
-              for name in definitions}
+    weight_only_weight = 0.05
+    structural = PlasticityState.initial((("sensor", "integrator"),))
+    errors = {
+        name: {"squared": 0.0, "absolute": 0.0, "count": 0}
+        for name in ("fixed", "weight_only", "structural")
+    }
     persistence_squared = 0.0
 
     for index in range(train_steps + evaluation_steps):
@@ -170,14 +170,13 @@ def run_forecast_benchmark(
         target = values[index + 1]
         training = index < train_steps
 
-        for name, config in definitions.items():
+        for name in ("fixed", "weight_only", "structural"):
             if name == "fixed":
                 weight, active = 0.05, True
             elif name == "weight_only":
-                edge = plastic[name].connections[0]
-                weight, active = edge.weight, True
+                weight, active = weight_only_weight, True
             else:
-                edge = plastic[name].connections[0]
+                edge = structural.connections[0]
                 weight, active = edge.weight, edge.active
 
             graph = _network(weight, active)
@@ -206,16 +205,28 @@ def run_forecast_benchmark(
 
             states[name] = next_state
 
-            # Plasticity is driven only by the current network activity and is
-            # frozen for the entire held-out evaluation segment.
-            if training and name in plastic:
+            # Both adaptive variants use the same bounded Hebbian weight rule.
+            # Only the structural variant may activate or prune the candidate.
+            if training and name in ("weight_only", "structural"):
                 activities = {
                     "sensor": next_state.nodes[0].state.y[0],
                     "integrator": next_state.nodes[1].state.y[0],
                 }
-                plastic[name] = step_plasticity(
-                    plastic[name], activities, edge_parameters
-                )
+                pre, post = activities["sensor"], activities["integrator"]
+                if name == "weight_only":
+                    raw = (
+                        weight_only_weight
+                        + edge_parameters.learning_rate * pre * post
+                        - edge_parameters.weight_decay * weight_only_weight
+                    )
+                    weight_only_weight = max(
+                        -edge_parameters.max_abs_weight,
+                        min(edge_parameters.max_abs_weight, raw),
+                    )
+                else:
+                    structural = step_plasticity(
+                        structural, activities, edge_parameters
+                    )
 
         if not training:
             persistence_error = current - target
@@ -228,8 +239,10 @@ def run_forecast_benchmark(
             raise RuntimeError("forecast evaluation count does not match protocol")
         if name == "fixed":
             final_weight, final_active = 0.05, True
+        elif name == "weight_only":
+            final_weight, final_active = weight_only_weight, True
         else:
-            final = plastic[name].connections[0]
+            final = structural.connections[0]
             final_weight, final_active = final.weight, final.active
         mse = errors[name]["squared"] / count
         mae = errors[name]["absolute"] / count

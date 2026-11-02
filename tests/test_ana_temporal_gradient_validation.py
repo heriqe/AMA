@@ -1,4 +1,5 @@
 import math
+from dataclasses import replace
 
 import pytest
 
@@ -7,7 +8,7 @@ from ama.ana.unit import NeuralUnitParameters
 
 
 def make_parameters():
-    return NeuralUnitParameters.zeros(
+    base = NeuralUnitParameters.zeros(
         input_size=1,
         relation_size=1,
         internal_size=1,
@@ -15,19 +16,8 @@ def make_parameters():
         rho=0.8,
         eta=0.0,
         gamma=0.0,
-    ).__class__(
-        **{
-            **{
-                field: getattr(NeuralUnitParameters.zeros(
-                    input_size=1, relation_size=1, internal_size=1, output_size=1,
-                    rho=0.8, eta=0.0, gamma=0.0,
-                ), field)
-                for field in NeuralUnitParameters.__dataclass_fields__
-            },
-            "w_xu": ((0.55,),),
-            "w_yx": ((1.0,),),
-        }
     )
+    return replace(base, w_xu=((0.55,),), w_yx=((1.0,),))
 
 
 def test_analytic_temporal_gradient_matches_central_difference_across_epsilons():
@@ -51,8 +41,10 @@ def test_analytic_temporal_gradient_matches_central_difference_across_epsilons()
 def test_central_difference_error_decreases_for_reasonable_epsilon_range():
     parameters = make_parameters()
     inputs = tuple((index % 11 - 5) / 20 for index in range(50))
-    targets = tuple(0.2 * value + 0.1 * (inputs[index - 1] if index else 0.0)
-                    for index, value in enumerate(inputs))
+    targets = tuple(
+        0.2 * value + 0.1 * (inputs[index - 1] if index else 0.0)
+        for index, value in enumerate(inputs)
+    )
     report = compare_temporal_gradients(
         parameters, inputs, targets,
         recurrent_weights=(0.25,), epsilons=(1e-2, 1e-3, 1e-4),
@@ -66,13 +58,12 @@ def test_central_difference_error_decreases_for_reasonable_epsilon_range():
 def test_gradient_validation_rejects_invalid_epsilons(epsilons):
     parameters = make_parameters()
     with pytest.raises(ValueError):
-        compare_temporal_gradients(parameters, (0.1, 0.2), (0.0, 0.1),
-                                   epsilons=epsilons)
+        compare_temporal_gradients(
+            parameters, (0.1, 0.2), (0.0, 0.1), epsilons=epsilons
+        )
 
 
 def test_gradient_validation_rejects_non_reference_state_pathways():
-    from dataclasses import replace
-
     parameters = replace(make_parameters(), w_xm=((0.1,),))
     with pytest.raises(ValueError, match="pathways"):
         compare_temporal_gradients(parameters, (0.1, 0.2), (0.0, 0.1))

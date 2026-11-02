@@ -4,7 +4,7 @@ O **AMA** é um projeto experimental para construir uma plataforma própria de i
 
 A meta é desenvolver, em etapas verificáveis, um núcleo cognitivo independente de serviços externos de IA e, em uma linha de pesquisa separada, a **ANA (AMA Neural Architecture)**. A integração entre os dois só ocorrerá quando houver componentes testados e interfaces definidas.
 
-> **Estado atual:** Foundation v0.1, Cognitive Core v0.2 e ANA v0.1 estão integrados à `main`. ANA v0.2 está em revisão no PR #7; ANA v0.3 depende do PR #7 e está em revisão no PR #8; ANA v0.4 depende do PR #8 e está em revisão no PR #9; ANA v0.5 depende do PR #9 e está em revisão no PR #10; o experimento de validação da ANA v0.5 está em revisão no PR #11, dependente do #10. O AMA ainda não é um sistema autônomo de geração de renda e não deve ser usado para movimentar dinheiro, publicar conteúdo ou assumir compromissos externos.
+> **Estado atual:** Foundation v0.1, Cognitive Core v0.2 e ANA v0.1 estão integrados à `main`. ANA v0.2 está em revisão no PR #7; ANA v0.3 depende do PR #7 e está em revisão no PR #8; ANA v0.4 depende do PR #8 e está em revisão no PR #9; ANA v0.5 depende do PR #9 e está em revisão no PR #10; o benchmark sintético está em revisão no PR #11, dependente do #10; a extensão de robustez a ruído e múltiplas sementes está em revisão no PR #12, dependente do #11. O AMA ainda não é um sistema autônomo de geração de renda e não deve ser usado para movimentar dinheiro, publicar conteúdo ou assumir compromissos externos.
 
 ## Princípios
 
@@ -77,6 +77,7 @@ pytest
 | ANA v0.4 — aprendizado limitado | Em revisão no PR #9 (dependente do #8) |
 | ANA v0.5 — plasticidade dinâmica limitada | Em revisão no PR #10 (dependente do #9) |
 | Experimento sintético de plasticidade v0.5 | Em revisão no PR #11 (dependente do #10) |
+| Robustez a ruído e múltiplas sementes | Em revisão no PR #12 (dependente do #11) |
 | Linguagem natural livre | Não implementada |
 | Aprendizado cognitivo/neural | Protótipos experimentais ANA v0.4/v0.5 |
 | Organização empresarial e agentes | Futuro |
@@ -84,6 +85,6 @@ pytest
 
 ## Limites atuais
 
-O Cognitive Core manipula observações estruturadas e regras determinísticas; não interpreta linguagem natural livre. A ANA v0.1 implementa uma transição numérica para uma unidade isolada. A ANA v0.2 conecta unidades em um grafo dirigido e propaga sinais sincronamente usando o estado anterior; a topologia e os pesos permanecem fixos. A ANA v0.3 mantém traços temporais em diferentes escalas e produz contexto agregado, ainda sem integração automática à rede. A ANA v0.4 adiciona regras experimentais de ajuste supervisionado, por recompensa e previsão auto-supervisionada em um vetor de pesos de saída escalar; ainda não treina a rede recorrente inteira. A ANA v0.5 pesquisa plasticidade limitada em um conjunto explícito de conexões candidatas, com fortalecimento, ativação e poda controlados; não cria unidades nem pares arbitrários. O benchmark atual mede somente rastreamento de peso em uma sequência sintética de duas unidades; não mede inteligência, generalização ou desempenho cognitivo. Nenhum desses componentes executa negócios ou ações externas.
+O Cognitive Core manipula observações estruturadas e regras determinísticas; não interpreta linguagem natural livre. A ANA v0.1 implementa uma transição numérica para uma unidade isolada. A ANA v0.2 conecta unidades em um grafo dirigido e propaga sinais sincronamente usando o estado anterior; a topologia e os pesos permanecem fixos. A ANA v0.3 mantém traços temporais em diferentes escalas e produz contexto agregado, ainda sem integração automática à rede. A ANA v0.4 adiciona regras experimentais de ajuste supervisionado, por recompensa e previsão auto-supervisionada em um vetor de pesos de saída escalar; ainda não treina a rede recorrente inteira. A ANA v0.5 pesquisa plasticidade limitada em um conjunto explícito de conexões candidatas, com fortalecimento, ativação e poda controlados; não cria unidades nem pares arbitrários. Os experimentos atuais medem somente rastreamento de peso em uma sequência sintética de duas unidades; não medem inteligência, generalização ou desempenho cognitivo. Nenhum desses componentes executa negócios ou ações externas.
 
-Consulte [docs/ROADMAP.md](docs/ROADMAP.md) para a sequência de desenvolvimento e [docs/ana/ANA_v0.5_experiments.md](docs/ana/ANA_v0.5_experiments.md) para o protocolo e os resultados do experimento.
+Consulte [docs/ROADMAP.md](docs/ROADMAP.md) para a sequência de desenvolvimento e os documentos em [docs/ana](docs/ana/) para protocolos e resultados experimentais.

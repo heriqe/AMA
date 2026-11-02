@@ -42,7 +42,8 @@ O roadmap é incremental. Datas são referências, não promessas de entrega.
 - [ ] ANA v0.4: regras de aprendizado supervisionado, por recompensa e previsão auto-supervisionada (PR #9 dependente do #8).
 - [ ] ANA v0.5: plasticidade de peso, ativação por coativação persistente e poda com histerese em conjunto candidato explícito (PR #10 dependente do #9).
 - [ ] Experimentos ANA v0.5: benchmark sintético fixo vs. peso adaptativo vs. plasticidade estrutural (PR #11 dependente do #10).
-- [ ] Repetir experimentos com ruído, múltiplas sementes e tarefas de previsão na rede completa.
+- [ ] Experimentos ANA v0.5: robustez a ruído gaussiano limitado, com sementes controladas e comparação pareada (PR #12 dependente do #11).
+- [ ] Repetir experimentos com ruído correlacionado, mudanças graduais e tarefas de previsão na rede completa.
 - [ ] ANA 1.0: interface experimental para integração com o Cognitive Core.
 
 ## Plataforma AMA

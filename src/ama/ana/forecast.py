@@ -265,3 +265,89 @@ def run_forecast_benchmark(
         persistence_baseline_mse=persistence_squared / evaluation_steps,
         variants=tuple(variants),
     )
+
+
+@dataclass(frozen=True, slots=True)
+class ForecastAggregate:
+    """Population summary for one strategy across independent seeds."""
+
+    name: str
+    mean_mse: float
+    std_mse: float
+    mean_mae: float
+    std_mae: float
+
+
+@dataclass(frozen=True, slots=True)
+class ForecastSuiteReport:
+    """Multi-seed forecast results with paired per-seed reports retained."""
+
+    seeds: tuple[int, ...]
+    reports: tuple[ForecastBenchmarkReport, ...]
+    mean_persistence_mse: float
+    std_persistence_mse: float
+    aggregates: tuple[ForecastAggregate, ...]
+
+
+def _mean(values: tuple[float, ...]) -> float:
+    return sum(values) / len(values)
+
+
+def _population_std(values: tuple[float, ...]) -> float:
+    average = _mean(values)
+    return math.sqrt(sum((value - average) ** 2 for value in values) / len(values))
+
+
+def run_forecast_suite(
+    seeds: tuple[int, ...] = (3, 7, 11, 19, 23, 31, 43, 59, 71, 89),
+    train_steps: int = 300,
+    evaluation_steps: int = 120,
+) -> ForecastSuiteReport:
+    """Aggregate identical forecasting protocols over independent RNG seeds.
+
+    Per-seed reports are retained so strategy comparisons remain paired on
+    identical generated data. Standard deviations are population descriptive
+    statistics, not confidence intervals or significance tests.
+    """
+    if not isinstance(seeds, tuple) or not seeds:
+        raise ValueError("seeds must be a non-empty tuple")
+    if any(isinstance(seed, bool) or not isinstance(seed, int) for seed in seeds):
+        raise ValueError("every seed must be an integer")
+    if len(set(seeds)) != len(seeds):
+        raise ValueError("seeds must be unique")
+
+    reports = tuple(
+        run_forecast_benchmark(
+            seed=seed,
+            train_steps=train_steps,
+            evaluation_steps=evaluation_steps,
+        )
+        for seed in seeds
+    )
+    names = tuple(item.name for item in reports[0].variants)
+    aggregates = []
+    for name in names:
+        variants = tuple(
+            next(item for item in report.variants if item.name == name)
+            for report in reports
+        )
+        mse_values = tuple(item.mean_squared_error for item in variants)
+        mae_values = tuple(item.mean_absolute_error for item in variants)
+        aggregates.append(
+            ForecastAggregate(
+                name=name,
+                mean_mse=_mean(mse_values),
+                std_mse=_population_std(mse_values),
+                mean_mae=_mean(mae_values),
+                std_mae=_population_std(mae_values),
+            )
+        )
+
+    baseline_values = tuple(report.persistence_baseline_mse for report in reports)
+    return ForecastSuiteReport(
+        seeds=seeds,
+        reports=reports,
+        mean_persistence_mse=_mean(baseline_values),
+        std_persistence_mse=_population_std(baseline_values),
+        aggregates=tuple(aggregates),
+    )

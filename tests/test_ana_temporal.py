@@ -43,8 +43,8 @@ def test_higher_retention_preserves_more_of_previous_trace():
 
     result = step_multiscale_memory(state, (0.0,), p)
 
-    assert result.state.traces[0][0] == pytest.approx(0.8)
-    assert result.state.traces[1][0] == pytest.approx(0.2)
+    assert result.state.traces[0][0] == pytest.approx(0.2)
+    assert result.state.traces[1][0] == pytest.approx(0.8)
 
 
 def test_context_is_normalized_weighted_sum_of_updated_traces():

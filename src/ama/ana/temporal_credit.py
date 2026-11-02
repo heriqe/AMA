@@ -310,3 +310,76 @@ def run_temporal_credit_benchmark(
         initial_recurrent_weight=fixed_parameters.w_xx[0][0],
         learned_recurrent_weight=learned_parameters.w_xx[0][0],
     )
+
+
+@dataclass(frozen=True, slots=True)
+class TemporalCreditAggregate:
+    """Descriptive multi-seed statistics for one recurrent strategy."""
+
+    name: str
+    mean_mse: float
+    std_mse: float
+    mean_mae: float
+    std_mae: float
+
+
+@dataclass(frozen=True, slots=True)
+class TemporalCreditSuiteReport:
+    """Paired temporal-credit reports and descriptive multi-seed aggregates."""
+
+    seeds: tuple[int, ...]
+    reports: tuple[TemporalCreditBenchmarkReport, ...]
+    aggregates: tuple[TemporalCreditAggregate, ...]
+
+
+def _mean(values: tuple[float, ...]) -> float:
+    return sum(values) / len(values)
+
+
+def _population_std(values: tuple[float, ...]) -> float:
+    average = _mean(values)
+    return math.sqrt(sum((value - average) ** 2 for value in values) / len(values))
+
+
+def run_temporal_credit_suite(
+    seeds: tuple[int, ...] = (2, 5, 11, 17, 29, 41, 53, 67, 79, 97),
+    train_steps: int = 300,
+    evaluation_steps: int = 120,
+) -> TemporalCreditSuiteReport:
+    """Aggregate paired fixed-vs-learned recurrence evaluations over seeds."""
+    if not isinstance(seeds, tuple) or not seeds:
+        raise ValueError("seeds must be a non-empty tuple")
+    if any(isinstance(seed, bool) or not isinstance(seed, int) for seed in seeds):
+        raise ValueError("seeds must contain only integers")
+    if len(set(seeds)) != len(seeds):
+        raise ValueError("seeds must be unique")
+
+    reports = tuple(
+        run_temporal_credit_benchmark(
+            seed=seed,
+            train_steps=train_steps,
+            evaluation_steps=evaluation_steps,
+        )
+        for seed in seeds
+    )
+    aggregates = []
+    for name, mse_field, mae_field in (
+        ("fixed", "fixed_mse", "fixed_mae"),
+        ("learned", "learned_mse", "learned_mae"),
+    ):
+        mse_values = tuple(getattr(report, mse_field) for report in reports)
+        mae_values = tuple(getattr(report, mae_field) for report in reports)
+        aggregates.append(
+            TemporalCreditAggregate(
+                name=name,
+                mean_mse=_mean(mse_values),
+                std_mse=_population_std(mse_values),
+                mean_mae=_mean(mae_values),
+                std_mae=_population_std(mae_values),
+            )
+        )
+    return TemporalCreditSuiteReport(
+        seeds=seeds,
+        reports=reports,
+        aggregates=tuple(aggregates),
+    )

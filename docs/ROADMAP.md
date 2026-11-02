@@ -1,6 +1,6 @@
 # Roadmap do AMA
 
-**Roadmap atualizado — 2026-11-01**
+**Roadmap atualizado — 2026-11-02**
 
 O roadmap é incremental. Datas são referências, não promessas de entrega.
 
@@ -26,7 +26,7 @@ O roadmap é incremental. Datas são referências, não promessas de entrega.
 
 ## Cognitive Core v0.3
 
-- [ ] Decisão multicritério com orçamento, risco e incerteza.
+- [x] Decisão multicritério com orçamento, risco e incerteza — implementação integrada.
 - [ ] Avaliação de resultados e registro de experiências.
 - [ ] Execução em sandbox, sem ações externas por padrão.
 - [ ] Auditoria e trilha de decisões.
@@ -36,11 +36,11 @@ O roadmap é incremental. Datas são referências, não promessas de entrega.
 
 - [x] ANA v0.1: especificação matemática da unidade neural.
 - [x] ANA v0.1: protótipo de transição de uma unidade isolada.
-- [ ] Revisão e integração da ANA v0.1 na `main` (PR #4).
-- [ ] ANA v0.2: dinâmica entre unidades, conexões e propagação síncrona.
+- [x] ANA v0.1 integrada à `main`.
+- [ ] ANA v0.2: grafo dirigido recorrente, conexões ponderadas e propagação síncrona (em revisão).
 - [ ] ANA v0.3: memória/contexto em múltiplas escalas.
 - [ ] ANA v0.4: aprendizado supervisionado, por recompensa e descoberta de padrões.
-- [ ] ANA v0.5: redes maiores e conexões dinâmicas, com testes de estabilidade.
+- [ ] ANA v0.5: conexões dinâmicas, sob limites e testes de estabilidade.
 - [ ] ANA 1.0: interface experimental para integração com o Cognitive Core.
 
 ## Plataforma AMA

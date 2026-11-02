@@ -43,7 +43,8 @@ O roadmap é incremental. Datas são referências, não promessas de entrega.
 - [ ] ANA v0.5: plasticidade de peso, ativação por coativação persistente e poda com histerese em conjunto candidato explícito (PR #10 dependente do #9).
 - [ ] Experimentos ANA v0.5: benchmark sintético fixo vs. peso adaptativo vs. plasticidade estrutural (PR #11 dependente do #10).
 - [ ] Experimentos ANA v0.5: robustez a ruído gaussiano limitado, com sementes controladas e comparação pareada (PR #12 dependente do #11).
-- [ ] Benchmark de previsão temporal com a rede completa, readout LMS e avaliação fora da amostra (PR #13 dependente do #12).\n- [ ] Ampliar previsão para múltiplas sementes, mudanças de regime, baselines e intervalos de incerteza.
+- [ ] Benchmark de previsão temporal com a rede completa, readout LMS e avaliação fora da amostra (PR #13 dependente do #12).
+- [ ] Ampliar previsão para múltiplas sementes, mudanças de regime, baselines e intervalos de incerteza.
 - [ ] ANA 1.0: interface experimental para integração com o Cognitive Core.
 
 ## Plataforma AMA

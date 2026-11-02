@@ -73,8 +73,11 @@ pytest
 | Cognitive Core v0.2 — fatos, política, inferências e pipeline | Integrado |
 | ANA v0.1 — unidade neural isolada | Integrada |
 | ANA v0.2 — grafo recorrente e propagação síncrona | Em revisão no PR #7 |
-| ANA v0.3 — memória temporal multiescala | Em desenvolvimento no PR #8 (dependente do #7) |\n| Linguagem natural livre | Não implementada |
-| Aprendizado cognitivo/neural | Protótipo experimental ANA v0.4 em revisão |
+| ANA v0.3 — memória temporal multiescala | Em revisão no PR #8 (dependente do #7) |
+| ANA v0.4 — aprendizado limitado | Em revisão no PR #9 (dependente do #8) |
+| ANA v0.5 — plasticidade dinâmica limitada | Em revisão no PR #10 (dependente do #9) |
+| Linguagem natural livre | Não implementada |
+| Aprendizado cognitivo/neural | Protótipo ANA v0.4 em revisão |
 | Organização empresarial e agentes | Futuro |
 | Operação de negócios e integrações | Futuro, sujeita à governança |
 

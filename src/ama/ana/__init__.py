@@ -56,7 +56,14 @@ from ama.ana.unit import (
     NeuralUnitState,
     step,
 )
-from ama.ana.unit_forecast import (\n    UnitForecastAggregate,\n    UnitForecastReport,\n    UnitForecastSuiteReport,\n    run_unit_forecast_benchmark,\n    run_unit_forecast_suite,\n)\nfrom ama.ana.unit_learning import (
+from ama.ana.unit_forecast import (
+    UnitForecastAggregate,
+    UnitForecastReport,
+    UnitForecastSuiteReport,
+    run_unit_forecast_benchmark,
+    run_unit_forecast_suite,
+)
+from ama.ana.unit_learning import (
     UnitLearningPolicy,
     UnitLearningResult,
     supervised_unit_output_step,
@@ -92,7 +99,10 @@ __all__ = [
     "PlasticConnection",
     "PlasticityParameters",
     "PlasticityState",
-    "UnitForecastAggregate",\n    "UnitForecastReport",\n    "UnitForecastSuiteReport",\n    "UnitLearningPolicy",
+    "UnitForecastAggregate",
+    "UnitForecastReport",
+    "UnitForecastSuiteReport",
+    "UnitLearningPolicy",
     "UnitLearningResult",
     "autonomous_step",
     "reward_step",
@@ -102,10 +112,12 @@ __all__ = [
     "run_regime_shift_suite",
     "run_noise_robustness_benchmark",
     "run_plasticity_benchmark",
+    "run_unit_forecast_benchmark",
+    "run_unit_forecast_suite",
     "step",
     "step_multiscale_memory",
     "step_network",
     "step_plasticity",
     "supervised_step",
-    "supervised_unit_output_step",\n    "run_unit_forecast_benchmark",\n    "run_unit_forecast_suite",
+    "supervised_unit_output_step",
 ]

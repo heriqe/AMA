@@ -81,9 +81,9 @@ def _validate_state(
         raise ValueError("state weights must not be empty")
     checked_features = _as_vector(features, "features", len(state.weights))
     checked_weights = _as_vector(state.weights, "state.weights", len(state.weights))
-    checked_eligibility = _as_vector(
-        state.eligibility, "state.eligibility", len(state.weights)
-    )
+    _as_vector(state.eligibility, "state.eligibility", len(state.weights))
+    if any(abs(value) > parameters.max_abs_signal for value in checked_features):
+        raise ValueError("feature exceeds max_abs_signal")
     if isinstance(state.reward_baseline, bool) or not isinstance(
         state.reward_baseline, (int, float)
     ):
@@ -100,6 +100,8 @@ def _bounded_update(
     gradient: Vector,
     parameters: LearningParameters,
 ) -> tuple[Vector, Vector]:
+    if any(not math.isfinite(value) for value in gradient):
+        raise ValueError("gradient must contain only finite values")
     updates = tuple(
         max(
             -parameters.max_abs_update,
@@ -142,6 +144,8 @@ def supervised_step(
     expected = _validate_signal(target, "target", parameters)
     prediction = sum(weight * value for weight, value in zip(weights, inputs))
     error = expected - prediction
+    if not math.isfinite(prediction) or not math.isfinite(error):
+        raise ValueError("prediction and error must be finite")
     next_weights, update = _bounded_update(
         weights, tuple(error * value for value in inputs), parameters
     )
@@ -181,10 +185,18 @@ def reward_step(
     observed_reward = _validate_signal(reward, "reward", parameters)
     prediction = sum(weight * value for weight, value in zip(weights, inputs))
     eligibility = tuple(
-        parameters.eligibility_decay * old + current
+        max(
+            -parameters.max_abs_signal,
+            min(
+                parameters.max_abs_signal,
+                parameters.eligibility_decay * old + current,
+            ),
+        )
         for old, current in zip(checked_eligibility, inputs)
     )
     advantage = observed_reward - float(state.reward_baseline)
+    if not math.isfinite(prediction) or not math.isfinite(advantage):
+        raise ValueError("prediction and reward advantage must be finite")
     next_weights, update = _bounded_update(
         weights, tuple(advantage * value for value in eligibility), parameters
     )

@@ -141,3 +141,23 @@ def test_invalid_weight_state_is_rejected():
         supervised_step(
             LearningState.initial((2.0,)), (1.0,), 1.0, parameters()
         )
+
+
+def test_features_outside_signal_limit_are_rejected():
+    with pytest.raises(ValueError, match="feature exceeds"):
+        supervised_step(
+            LearningState.initial((0.0,)), (6.0,), 1.0, parameters()
+        )
+
+
+def test_invalid_eligibility_state_is_rejected_by_all_rules():
+    state = LearningState(weights=(0.0,), reward_baseline=0.0, eligibility=())
+    with pytest.raises(ValueError, match="state.eligibility"):
+        supervised_step(state, (1.0,), 1.0, parameters())
+
+
+def test_reward_eligibility_trace_is_bounded():
+    p = parameters(max_abs_signal=2.0)
+    state = LearningState(weights=(0.0,), reward_baseline=0.0, eligibility=(2.0,))
+    result = reward_step(state, (2.0,), 1.0, p)
+    assert result.state.eligibility == pytest.approx((2.0,))

@@ -132,3 +132,23 @@ def test_invalid_parameter_values_are_rejected():
         params(activation_steps=0)
     with pytest.raises(ValueError, match="weight_decay"):
         params(weight_decay=-0.1)
+
+
+def test_explicit_empty_initial_weights_are_rejected():
+    with pytest.raises(ValueError, match="match"):
+        PlasticityState.initial((("a", "b"),), ())
+
+
+def test_decay_must_not_exceed_one():
+    with pytest.raises(ValueError, match="weight_decay"):
+        params(weight_decay=1.1)
+
+
+def test_activation_steps_must_be_integer_not_boolean():
+    with pytest.raises(ValueError, match="positive integer"):
+        params(activation_steps=True)
+
+
+def test_zero_activation_threshold_is_rejected():
+    with pytest.raises(ValueError, match="activation_threshold"):
+        params(activation_threshold=0.0)

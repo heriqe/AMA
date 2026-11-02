@@ -42,3 +42,11 @@ def test_temporal_credit_suite_rejects_invalid_seed_sets(seeds):
         run_temporal_credit_suite(
             seeds, train_steps=20, evaluation_steps=20
         )
+
+
+def test_reference_multi_seed_suite_improves_held_out_forecast():
+    report = run_temporal_credit_suite()
+    fixed = report.aggregates[0]
+    learned = report.aggregates[1]
+    assert learned.mean_mse < fixed.mean_mse
+    assert learned.mean_mae < fixed.mean_mae

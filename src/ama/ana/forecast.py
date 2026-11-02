@@ -312,7 +312,7 @@ def run_forecast_suite(
     if not isinstance(seeds, tuple) or not seeds:
         raise ValueError("seeds must be a non-empty tuple")
     if any(isinstance(seed, bool) or not isinstance(seed, int) for seed in seeds):
-        raise ValueError("every seed must be an integer")
+        raise ValueError("seeds must contain only integers")
     if len(set(seeds)) != len(seeds):
         raise ValueError("seeds must be unique")
 

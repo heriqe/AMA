@@ -16,7 +16,7 @@ x_t = \tanh(w x_{t-1} + a u_t), \qquad
 y_t = \tanh(v x_t)
 \]
 
-onde (w = w_{xx}[0][0]), (a = w_{xu}[0][0]) e (v = w_{yx}[0][0]).
+onde w = w_{xx}[0][0], a = w_{xu}[0][0] e v = w_{yx}[0][0].
 
 A sensibilidade recorrente é calculada pela regra da cadeia:
 
@@ -30,7 +30,7 @@ q_t = \frac{\partial y_t}{\partial w}
 = (1-y_t^2)v s_t
 \]
 
-Para a perda MSE sobre (T) passos:
+Para a perda MSE sobre T passos:
 
 \[
 J(w)=\frac{1}{T}\sum_{t=1}^{T}(y_t-r_t)^2,

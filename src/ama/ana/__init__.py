@@ -14,7 +14,7 @@ from ama.ana.forecast import (
     ForecastSuiteReport,
     ForecastVariant,
     run_forecast_benchmark,
-    run_forecast_suite,
+    run_forecast_suite,\n    run_regime_shift_benchmark,
 )
 from ama.ana.learning import (
     LearningParameters,
@@ -58,7 +58,7 @@ __all__ = [
     "ForecastAggregate",
     "ForecastBenchmarkReport",
     "ForecastSuiteReport",
-    "ForecastVariant",
+    "ForecastVariant",\n    "RegimeShiftReport",\n    "RegimeShiftVariant",
     "LearningParameters",
     "LearningResult",
     "LearningState",
@@ -80,7 +80,7 @@ __all__ = [
     "autonomous_step",
     "reward_step",
     "run_forecast_benchmark",
-    "run_forecast_suite",
+    "run_forecast_suite",\n    "run_regime_shift_benchmark",
     "run_noise_robustness_benchmark",
     "run_plasticity_benchmark",
     "step",

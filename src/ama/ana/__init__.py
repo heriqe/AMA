@@ -1,5 +1,13 @@
-"""AMA Neural Architecture v0.1 single-unit primitives."""
+"""AMA Neural Architecture experimental components."""
 
+from ama.ana.network import (
+    Connection,
+    NetworkDefinition,
+    NetworkNode,
+    NetworkState,
+    NodeState,
+    step_network,
+)
 from ama.ana.unit import (
     NeuralUnitInput,
     NeuralUnitParameters,
@@ -8,8 +16,14 @@ from ama.ana.unit import (
 )
 
 __all__ = [
+    "Connection",
+    "NetworkDefinition",
+    "NetworkNode",
+    "NetworkState",
+    "NodeState",
     "NeuralUnitInput",
     "NeuralUnitParameters",
     "NeuralUnitState",
     "step",
+    "step_network",
 ]

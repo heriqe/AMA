@@ -40,18 +40,20 @@ class PlasticityParameters:
                 raise ValueError(f"{name} must be finite")
         if self.learning_rate <= 0.0:
             raise ValueError("learning_rate must be positive")
-        if self.weight_decay < 0.0:
-            raise ValueError("weight_decay must be non-negative")
+        if not 0.0 <= self.weight_decay <= 1.0:
+            raise ValueError("weight_decay must be in [0, 1]")
         if self.max_abs_weight <= 0.0:
             raise ValueError("max_abs_weight must be positive")
-        if not 0.0 <= self.activation_threshold <= self.max_abs_activity:
+        if not 0.0 < self.activation_threshold <= self.max_abs_activity:
             raise ValueError("activation_threshold is outside activity bounds")
         if self.prune_threshold < 0.0 or self.prune_threshold >= self.max_abs_weight:
             raise ValueError("prune_threshold must be in [0, max_abs_weight)")
         if self.max_abs_activity <= 0.0:
             raise ValueError("max_abs_activity must be positive")
-        if self.activation_steps < 1 or self.prune_steps < 1:
-            raise ValueError("activation_steps and prune_steps must be positive")
+        for name in ("activation_steps", "prune_steps"):
+            value = getattr(self, name)
+            if isinstance(value, bool) or not isinstance(value, int) or value < 1:
+                raise ValueError(f"{name} must be a positive integer")
         if not 0.0 < abs(self.initial_weight) <= self.max_abs_weight:
             raise ValueError("initial_weight must be non-zero and within weight bounds")
 
@@ -98,7 +100,7 @@ class PlasticityState:
     ) -> "PlasticityState":
         if initial_weights is not None and len(initial_weights) != len(candidate_pairs):
             raise ValueError("initial_weights must match candidate_pairs")
-        weights = initial_weights or (0.0,) * len(candidate_pairs)
+        weights = (0.0,) * len(candidate_pairs) if initial_weights is None else initial_weights
         seen: set[tuple[str, str]] = set()
         items: list[PlasticConnection] = []
         for (source, target), weight in zip(candidate_pairs, weights):

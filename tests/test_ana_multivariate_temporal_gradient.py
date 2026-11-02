@@ -1,4 +1,5 @@
 import math
+from dataclasses import replace
 
 import pytest
 
@@ -9,7 +10,7 @@ from ama.ana.unit import NeuralUnitParameters
 
 
 def make_parameters():
-    return NeuralUnitParameters.zeros(
+    base = NeuralUnitParameters.zeros(
         input_size=1,
         relation_size=1,
         internal_size=1,
@@ -17,27 +18,8 @@ def make_parameters():
         rho=0.8,
         eta=0.0,
         gamma=0.0,
-    ).__class__(
-        **{
-            **{
-                field: getattr(
-                    NeuralUnitParameters.zeros(
-                        input_size=1,
-                        relation_size=1,
-                        internal_size=1,
-                        output_size=1,
-                        rho=0.8,
-                        eta=0.0,
-                        gamma=0.0,
-                    ),
-                    field,
-                )
-                for field in NeuralUnitParameters.__dataclass_fields__
-            },
-            "w_xu": ((0.55,),),
-            "w_yx": ((1.0,),),
-        }
     )
+    return replace(base, w_xu=((0.55,),), w_yx=((1.0,),))
 
 
 def test_two_analytic_temporal_gradients_match_central_differences():

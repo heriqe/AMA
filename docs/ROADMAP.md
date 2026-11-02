@@ -45,7 +45,7 @@ O roadmap é incremental. Datas são referências, não promessas de entrega.
 - [ ] Experimentos ANA v0.5: robustez a ruído gaussiano limitado, com sementes controladas e comparação pareada (PR #12 dependente do #11).
 - [ ] Benchmark de previsão temporal com a rede completa, readout LMS e avaliação fora da amostra (PR #13 dependente do #12).
 - [ ] Ampliar previsão para múltiplas sementes, mudanças de regime, baselines e intervalos de incerteza.
-- [ ] ANA v0.6: aprendizado supervisionado local dos parâmetros de projeção de saída da unidade (PR #17 dependente do #16).\n- [ ] Avaliar aprendizado da unidade em sequência temporal com divisão treino/avaliação (benchmark no PR #18 dependente do #17).\n- [ ] Pesquisar atribuição de crédito temporal e aprendizado da dinâmica recorrente, sem assumir BPTT como solução definida.\n- [ ] ANA 1.0: interface experimental para integração com o Cognitive Core.
+- [ ] ANA v0.6: aprendizado supervisionado local dos parâmetros de projeção de saída da unidade (PR #17 dependente do #16).\n- [ ] Avaliar aprendizado da unidade em sequência temporal com divisão treino/avaliação (benchmark no PR #18 dependente do #17).\n- [ ] Crédito temporal experimental por diferenças finitas para um peso recorrente de unidade escalar (PR #19 dependente do #18).\n- [ ] Comparar diferenças finitas com derivadas analíticas e medir custo/sensibilidade.\n- [ ] Expandir crédito temporal para múltiplos parâmetros e redes pequenas, após validação.\n- [ ] ANA 1.0: interface experimental para integração com o Cognitive Core.
 
 ## Plataforma AMA
 

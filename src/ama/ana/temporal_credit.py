@@ -200,32 +200,6 @@ def fit_recurrent_weight(
     )
 
 
-def _rollout_errors(
-    parameters: NeuralUnitParameters,
-    inputs: tuple[float, ...],
-    targets: tuple[float, ...],
-) -> tuple[float, float]:
-    state = NeuralUnitState.initial(parameters)
-    for current in inputs:
-        state = step(
-            state,
-            NeuralUnitInput(external=(current,), relational=(0.0,)),
-            parameters,
-        )
-    squared = []
-    absolute = []
-    for current, target in zip(inputs[len(inputs) - len(targets):], targets):
-        state = step(
-            state,
-            NeuralUnitInput(external=(current,), relational=(0.0,)),
-            parameters,
-        )
-        difference = state.y[0] - target
-        squared.append(difference * difference)
-        absolute.append(abs(difference))
-    return sum(squared) / len(squared), sum(absolute) / len(absolute)
-
-
 def _unit_parameters() -> NeuralUnitParameters:
     base = NeuralUnitParameters.zeros(
         input_size=1,

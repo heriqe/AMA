@@ -51,7 +51,11 @@ Compara:
 - Não oferece garantia de convergência, estabilidade geral ou generalização fora da tarefa sintética.
 - A avaliação é uma demonstração controlada de mecanismo, não evidência de inteligência.
 
-## 5. Próximos experimentos
+## 5. Agregação multi-semente
+
+A API `run_temporal_credit_suite` repete o protocolo com sementes únicas e mantém os relatórios individuais pareados. Calcula média e desvio padrão populacional de MSE e MAE para as estratégias fixa e treinável. O desvio padrão é descritivo; não é intervalo de confiança nem teste de significância. A agregação está em revisão no PR #20, dependente do #19.
+
+## 6. Próximos experimentos
 
 1. Comparar diferenças finitas com derivadas analíticas em uma unidade pequena.
 2. Medir custo computacional e sensibilidade a epsilon, taxa de aprendizado e comprimento da sequência.

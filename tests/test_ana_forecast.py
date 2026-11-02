@@ -135,3 +135,52 @@ def test_regime_shift_benchmark_rejects_invalid_phase_lengths(name, value):
 def test_regime_shift_benchmark_rejects_invalid_seed(seed):
     with pytest.raises(ValueError, match="seed"):
         run_regime_shift_benchmark(seed=seed)
+
+
+from ama.ana.forecast import run_regime_shift_suite
+
+
+def test_regime_shift_suite_is_reproducible_and_preserves_paired_runs():
+    seeds = (5, 13, 23)
+    report = run_regime_shift_suite(
+        seeds, initial_train_steps=40, adaptation_steps=25, evaluation_steps=20
+    )
+    assert report == run_regime_shift_suite(
+        seeds, initial_train_steps=40, adaptation_steps=25, evaluation_steps=20
+    )
+    assert report.seeds == seeds
+    assert tuple(item.seed for item in report.reports) == seeds
+    assert tuple(item.name for item in report.aggregates) == (
+        "frozen",
+        "fixed_adaptive",
+        "weight_only",
+        "structural",
+    )
+
+
+def test_regime_shift_suite_aggregates_phase_metrics():
+    report = run_regime_shift_suite(
+        (5, 13, 23), initial_train_steps=40, adaptation_steps=25, evaluation_steps=20
+    )
+    for aggregate in report.aggregates:
+        values = tuple(
+            next(v for v in run.variants if v.name == aggregate.name).evaluation_mse
+            for run in report.reports
+        )
+        expected_mean = sum(values) / len(values)
+        expected_std = (
+            sum((value - expected_mean) ** 2 for value in values) / len(values)
+        ) ** 0.5
+        assert aggregate.mean_evaluation_mse == pytest.approx(expected_mean)
+        assert aggregate.std_evaluation_mse == pytest.approx(expected_std)
+
+
+@pytest.mark.parametrize(
+    "seeds",
+    [(), [], (1, 1), (True, 2), (1, 2.5), "1,2"],
+)
+def test_regime_shift_suite_rejects_invalid_seed_collections(seeds):
+    with pytest.raises(ValueError, match="seeds"):
+        run_regime_shift_suite(
+            seeds, initial_train_steps=20, adaptation_steps=20, evaluation_steps=20
+        )

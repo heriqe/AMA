@@ -3,6 +3,9 @@
 from ama.ana.benchmark import (
     BenchmarkReport,
     BenchmarkVariant,
+    NoiseBenchmarkReport,
+    NoiseBenchmarkVariant,
+    run_noise_robustness_benchmark,
     run_plasticity_benchmark,
 )
 
@@ -58,11 +61,14 @@ __all__ = [
     "NeuralUnitInput",
     "NeuralUnitParameters",
     "NeuralUnitState",
+    "NoiseBenchmarkReport",
+    "NoiseBenchmarkVariant",
     "PlasticConnection",
     "PlasticityParameters",
     "PlasticityState",
     "autonomous_step",
     "reward_step",
+    "run_noise_robustness_benchmark",
     "run_plasticity_benchmark",
     "step",
     "step_multiscale_memory",

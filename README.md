@@ -4,7 +4,7 @@ O **AMA** é um projeto experimental para construir uma plataforma própria de i
 
 A meta é desenvolver, em etapas verificáveis, um núcleo cognitivo independente de serviços externos de IA e, em uma linha de pesquisa separada, a **ANA (AMA Neural Architecture)**. A integração entre os dois só ocorrerá quando houver componentes testados e interfaces definidas.
 
-> **Estado atual:** Foundation v0.1, Cognitive Core v0.2 e ANA v0.1 estão integrados à `main`. ANA v0.2 está em revisão no PR #7; ANA v0.3 depende do PR #7 e está em revisão no PR #8; ANA v0.4 depende do PR #8 e está em revisão no PR #9; ANA v0.5 depende do PR #9 e está em revisão no PR #10; o benchmark sintético está em revisão no PR #11, dependente do #10; a extensão de robustez a ruído e múltiplas sementes está em revisão no PR #12, dependente do #11; o benchmark de previsão temporal com a rede completa está em revisão no PR #13, dependente do #12; a agregação multi-semente está em revisão no PR #14, dependente do #13; o experimento de mudança de regime está em revisão no PR #15, dependente do #14; a agregação multi-semente da mudança de regime está em revisão no PR #16, dependente do #15. o protótipo de aprendizado da projeção de saída interna da unidade está em revisão no PR #17, dependente do #16; o benchmark temporal da unidade treinável está em revisão no PR #18, dependente do #17; o protótipo de crédito temporal para um parâmetro recorrente está em revisão no PR #19, dependente do #18. O AMA ainda não é um sistema autônomo de geração de renda e não deve ser usado para movimentar dinheiro, publicar conteúdo ou assumir compromissos externos.
+> **Estado atual:** Foundation v0.1, Cognitive Core v0.2 e ANA v0.1 estão integrados à `main`. ANA v0.2 está em revisão no PR #7; ANA v0.3 depende do PR #7 e está em revisão no PR #8; ANA v0.4 depende do PR #8 e está em revisão no PR #9; ANA v0.5 depende do PR #9 e está em revisão no PR #10; o benchmark sintético está em revisão no PR #11, dependente do #10; a extensão de robustez a ruído e múltiplas sementes está em revisão no PR #12, dependente do #11; o benchmark de previsão temporal com a rede completa está em revisão no PR #13, dependente do #12; a agregação multi-semente está em revisão no PR #14, dependente do #13; o experimento de mudança de regime está em revisão no PR #15, dependente do #14; a agregação multi-semente da mudança de regime está em revisão no PR #16, dependente do #15; o protótipo de aprendizado da projeção de saída interna da unidade está em revisão no PR #17, dependente do #16; o benchmark temporal da unidade treinável está em revisão no PR #18, dependente do #17; o protótipo de crédito temporal para um parâmetro recorrente está em revisão no PR #19, dependente do #18. O AMA ainda não é um sistema autônomo de geração de renda e não deve ser usado para movimentar dinheiro, publicar conteúdo ou assumir compromissos externos.
 
 ## Princípios
 
@@ -81,10 +81,12 @@ pytest
 | Previsão temporal com a rede completa | Em revisão no PR #13 (dependente do #12) |
 | Agregação multi-semente da previsão | Em revisão no PR #14 (dependente do #13) |
 | Adaptação após mudança de regime | Em revisão no PR #15 (dependente do #14) |
-| Agregação multi-semente da mudança de regime | Em revisão no PR #16 (dependente do #15) |\n| ANA v0.6 — aprendizado supervisionado da projeção de saída interna | Em revisão no PR #17 (dependente do #16) |
-| Benchmark temporal da unidade treinável | Em revisão no PR #18 (dependente do #17) |\n| Crédito temporal por diferenças finitas em parâmetro recorrente | Em revisão no PR #19 (dependente do #18) |
+| Agregação multi-semente da mudança de regime | Em revisão no PR #16 (dependente do #15) |
+| ANA v0.6 — aprendizado supervisionado da projeção de saída interna | Em revisão no PR #17 (dependente do #16) |
+| Benchmark temporal da unidade treinável | Em revisão no PR #18 (dependente do #17) |
+| Crédito temporal por diferenças finitas em parâmetro recorrente | Em revisão no PR #19 (dependente do #18) |
 | Linguagem natural livre | Não implementada |
-| Aprendizado cognitivo/neural | Protótipos experimentais ANA v0.4/v0.5 |
+| Aprendizado cognitivo/neural | Protótipos experimentais ANA v0.4/v0.5 e mecanismos locais v0.6/v0.7 em revisão |
 | Organização empresarial e agentes | Futuro |
 | Operação de negócios e integrações | Futuro, sujeita à governança |
 

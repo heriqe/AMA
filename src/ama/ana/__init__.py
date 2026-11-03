@@ -57,11 +57,14 @@ from ama.ana.unit import (
     step,
 )
 from ama.ana.temporal_credit import (
+    TemporalCreditAggregate,
     TemporalCreditBenchmarkReport,
     TemporalCreditPolicy,
     TemporalCreditResult,
+    TemporalCreditSuiteReport,
     fit_recurrent_weight,
     run_temporal_credit_benchmark,
+    run_temporal_credit_suite,
 )
 from ama.ana.unit_forecast import (
     UnitForecastAggregate,
@@ -106,9 +109,11 @@ __all__ = [
     "PlasticConnection",
     "PlasticityParameters",
     "PlasticityState",
+    "TemporalCreditAggregate",
     "TemporalCreditBenchmarkReport",
     "TemporalCreditPolicy",
     "TemporalCreditResult",
+    "TemporalCreditSuiteReport",
     "UnitForecastAggregate",
     "UnitForecastReport",
     "UnitForecastSuiteReport",
@@ -124,6 +129,7 @@ __all__ = [
     "run_plasticity_benchmark",
     "fit_recurrent_weight",
     "run_temporal_credit_benchmark",
+    "run_temporal_credit_suite",
     "run_unit_forecast_benchmark",
     "run_unit_forecast_suite",
     "step",

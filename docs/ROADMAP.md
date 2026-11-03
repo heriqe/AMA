@@ -48,7 +48,7 @@ O roadmap é incremental. Datas são referências, não promessas de entrega.
 - [ ] ANA v0.6: aprendizado supervisionado local dos parâmetros de projeção de saída da unidade (PR #17 dependente do #16).
 - [ ] Avaliar aprendizado da unidade em sequência temporal com divisão treino/avaliação (benchmark no PR #18 dependente do #17).
 - [ ] Crédito temporal experimental por diferenças finitas para um peso recorrente de unidade escalar (PR #19 dependente do #18).
-- [ ] Comparar diferenças finitas com derivadas analíticas e medir custo/sensibilidade.
+- [ ] Agregar crédito temporal por múltiplas sementes, preservando comparações pareadas (PR #20 dependente do #19).\n- [ ] Comparar diferenças finitas com derivadas analíticas e medir custo/sensibilidade.
 - [ ] Expandir crédito temporal para múltiplos parâmetros e redes pequenas, após validação.
 - [ ] ANA 1.0: interface experimental para integração com o Cognitive Core.
 

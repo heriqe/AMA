@@ -1,5 +1,11 @@
 """AMA Neural Architecture experimental components."""
 
+from ama.ana.benchmark import (
+    BenchmarkReport,
+    BenchmarkVariant,
+    run_plasticity_benchmark,
+)
+
 from ama.ana.learning import (
     LearningParameters,
     LearningResult,
@@ -36,6 +42,8 @@ from ama.ana.unit import (
 )
 
 __all__ = [
+    "BenchmarkReport",
+    "BenchmarkVariant",
     "Connection",
     "LearningParameters",
     "LearningResult",
@@ -55,6 +63,7 @@ __all__ = [
     "PlasticityState",
     "autonomous_step",
     "reward_step",
+    "run_plasticity_benchmark",
     "step",
     "step_multiscale_memory",
     "step_network",

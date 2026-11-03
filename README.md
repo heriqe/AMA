@@ -4,7 +4,7 @@ O **AMA** é um projeto experimental para construir uma plataforma própria de i
 
 A meta é desenvolver, em etapas verificáveis, um núcleo cognitivo independente de serviços externos de IA e, em uma linha de pesquisa separada, a **ANA (AMA Neural Architecture)**. A integração entre os dois só ocorrerá quando houver componentes testados e interfaces definidas.
 
-> **Estado atual:** Foundation v0.1 e Cognitive Core v0.2 integrados à `main`. A ANA v0.1 (unidade neural isolada) também está integrada. A ANA v0.2 (rede recorrente, conexões e propagação síncrona) está em revisão neste PR. O AMA ainda não é um sistema autônomo de geração de renda e não deve ser usado para movimentar dinheiro, publicar conteúdo ou assumir compromissos externos.
+> **Estado atual:** Foundation v0.1, Cognitive Core v0.2 e ANA v0.1 estão integrados à `main`. ANA v0.2 está em revisão no PR #7; ANA v0.3 depende do PR #7 e está em revisão no PR #8; ANA v0.4 está em desenvolvimento no PR #9. O AMA ainda não é um sistema autônomo de geração de renda e não deve ser usado para movimentar dinheiro, publicar conteúdo ou assumir compromissos externos.
 
 ## Princípios
 
@@ -27,7 +27,7 @@ AMA/
 │   ├── ana/            # especificações da ANA
 │   └── decisions/
 ├── src/ama/
-│   ├── ana/            # unidade v0.1, rede v0.2 e memória temporal v0.3
+│   ├── ana/            # unidade, rede, memória temporal e aprendizado experimental
 │   ├── core/           # contratos e pipeline cognitivo
 │   ├── knowledge/      # fatos, política de validade/conflito e SQLite
 │   ├── memory/         # registros persistentes
@@ -74,12 +74,12 @@ pytest
 | ANA v0.1 — unidade neural isolada | Integrada |
 | ANA v0.2 — grafo recorrente e propagação síncrona | Em revisão no PR #7 |
 | ANA v0.3 — memória temporal multiescala | Em desenvolvimento no PR #8 (dependente do #7) |\n| Linguagem natural livre | Não implementada |
-| Aprendizado cognitivo/neural | Pesquisa futura |
+| Aprendizado cognitivo/neural | Protótipo experimental ANA v0.4 em revisão |
 | Organização empresarial e agentes | Futuro |
 | Operação de negócios e integrações | Futuro, sujeita à governança |
 
 ## Limites atuais
 
-O Cognitive Core manipula observações estruturadas e regras determinísticas; não interpreta linguagem natural livre. A ANA v0.1 implementa uma transição numérica para uma unidade isolada. A ANA v0.2 conecta unidades em um grafo dirigido e propaga sinais sincronamente usando o estado anterior; a topologia e os pesos permanecem fixos. A ANA v0.3 mantém traços temporais em diferentes escalas e produz contexto agregado, ainda sem integração automática à rede. Nenhum desses componentes implementa aprendizado neural ou executa negócios e ações externas.
+O Cognitive Core manipula observações estruturadas e regras determinísticas; não interpreta linguagem natural livre. A ANA v0.1 implementa uma transição numérica para uma unidade isolada. A ANA v0.2 conecta unidades em um grafo dirigido e propaga sinais sincronamente usando o estado anterior; a topologia e os pesos permanecem fixos. A ANA v0.3 mantém traços temporais em diferentes escalas e produz contexto agregado, ainda sem integração automática à rede. A ANA v0.4 adiciona regras experimentais de ajuste supervisionado, por recompensa e previsão auto-supervisionada em um vetor de pesos de saída escalar; ainda não treina a rede recorrente inteira. Nenhum desses componentes executa negócios ou ações externas.
 
 Consulte [docs/ROADMAP.md](docs/ROADMAP.md) para a sequência de desenvolvimento.

@@ -569,3 +569,86 @@ def run_regime_shift_benchmark(
         persistence_baseline_mse=persistence_squared / evaluation_steps,
         variants=tuple(variants),
     )
+
+
+@dataclass(frozen=True, slots=True)
+class RegimeShiftAggregate:
+    """Population summary across seeds for one regime-shift strategy."""
+
+    name: str
+    mean_adaptation_mse: float
+    std_adaptation_mse: float
+    mean_evaluation_mse: float
+    std_evaluation_mse: float
+    mean_evaluation_mae: float
+    std_evaluation_mae: float
+
+
+@dataclass(frozen=True, slots=True)
+class RegimeShiftSuiteReport:
+    """Multi-seed regime-shift reports with paired runs retained."""
+
+    seeds: tuple[int, ...]
+    reports: tuple[RegimeShiftReport, ...]
+    mean_persistence_mse: float
+    std_persistence_mse: float
+    aggregates: tuple[RegimeShiftAggregate, ...]
+
+
+def run_regime_shift_suite(
+    seeds: tuple[int, ...] = (5, 13, 23, 37, 53, 71, 89, 107, 131, 151),
+    initial_train_steps: int = 300,
+    adaptation_steps: int = 120,
+    evaluation_steps: int = 120,
+) -> RegimeShiftSuiteReport:
+    """Aggregate regime-shift performance across independent paired seeds.
+
+    Means and population standard deviations are descriptive only. Individual
+    reports are retained to support paired comparisons; no confidence interval
+    or significance claim is inferred from these summaries.
+    """
+    if not isinstance(seeds, tuple) or not seeds:
+        raise ValueError("seeds must be a non-empty tuple")
+    if any(isinstance(seed, bool) or not isinstance(seed, int) for seed in seeds):
+        raise ValueError("seeds must contain only integers")
+    if len(set(seeds)) != len(seeds):
+        raise ValueError("seeds must be unique")
+
+    reports = tuple(
+        run_regime_shift_benchmark(
+            seed=seed,
+            initial_train_steps=initial_train_steps,
+            adaptation_steps=adaptation_steps,
+            evaluation_steps=evaluation_steps,
+        )
+        for seed in seeds
+    )
+    names = tuple(item.name for item in reports[0].variants)
+    aggregates = []
+    for name in names:
+        variants = tuple(
+            next(item for item in report.variants if item.name == name)
+            for report in reports
+        )
+        adaptation = tuple(item.adaptation_mse for item in variants)
+        evaluation = tuple(item.evaluation_mse for item in variants)
+        absolute = tuple(item.evaluation_mae for item in variants)
+        aggregates.append(
+            RegimeShiftAggregate(
+                name=name,
+                mean_adaptation_mse=_mean(adaptation),
+                std_adaptation_mse=_population_std(adaptation),
+                mean_evaluation_mse=_mean(evaluation),
+                std_evaluation_mse=_population_std(evaluation),
+                mean_evaluation_mae=_mean(absolute),
+                std_evaluation_mae=_population_std(absolute),
+            )
+        )
+    baselines = tuple(report.persistence_baseline_mse for report in reports)
+    return RegimeShiftSuiteReport(
+        seeds=seeds,
+        reports=reports,
+        mean_persistence_mse=_mean(baselines),
+        std_persistence_mse=_population_std(baselines),
+        aggregates=tuple(aggregates),
+    )

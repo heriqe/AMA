@@ -27,7 +27,7 @@ AMA/
 │   ├── ana/            # especificações da ANA
 │   └── decisions/
 ├── src/ama/
-│   ├── ana/            # unidade v0.1 e rede experimental v0.2
+│   ├── ana/            # unidade v0.1, rede v0.2 e memória temporal v0.3
 │   ├── core/           # contratos e pipeline cognitivo
 │   ├── knowledge/      # fatos, política de validade/conflito e SQLite
 │   ├── memory/         # registros persistentes
@@ -72,14 +72,14 @@ pytest
 | Fundação e empacotamento Python | Integrado |
 | Cognitive Core v0.2 — fatos, política, inferências e pipeline | Integrado |
 | ANA v0.1 — unidade neural isolada | Integrada |
-| ANA v0.2 — grafo recorrente e propagação síncrona | Em revisão neste PR |
-| Linguagem natural livre | Não implementada |
+| ANA v0.2 — grafo recorrente e propagação síncrona | Em revisão no PR #7 |
+| ANA v0.3 — memória temporal multiescala | Em desenvolvimento no PR #8 (dependente do #7) |\n| Linguagem natural livre | Não implementada |
 | Aprendizado cognitivo/neural | Pesquisa futura |
 | Organização empresarial e agentes | Futuro |
 | Operação de negócios e integrações | Futuro, sujeita à governança |
 
 ## Limites atuais
 
-O Cognitive Core manipula observações estruturadas e regras determinísticas; não interpreta linguagem natural livre. A ANA v0.1 implementa uma transição numérica para uma unidade isolada. A ANA v0.2 conecta unidades em um grafo dirigido e propaga sinais sincronamente usando o estado anterior; a topologia e os pesos permanecem fixos. Nenhum desses componentes implementa aprendizado neural ou executa negócios e ações externas.
+O Cognitive Core manipula observações estruturadas e regras determinísticas; não interpreta linguagem natural livre. A ANA v0.1 implementa uma transição numérica para uma unidade isolada. A ANA v0.2 conecta unidades em um grafo dirigido e propaga sinais sincronamente usando o estado anterior; a topologia e os pesos permanecem fixos. A ANA v0.3 mantém traços temporais em diferentes escalas e produz contexto agregado, ainda sem integração automática à rede. Nenhum desses componentes implementa aprendizado neural ou executa negócios e ações externas.
 
 Consulte [docs/ROADMAP.md](docs/ROADMAP.md) para a sequência de desenvolvimento.

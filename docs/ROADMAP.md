@@ -37,9 +37,9 @@ O roadmap é incremental. Datas são referências, não promessas de entrega.
 - [x] ANA v0.1: especificação matemática da unidade neural.
 - [x] ANA v0.1: protótipo de transição de uma unidade isolada.
 - [x] ANA v0.1 integrada à `main`.
-- [ ] ANA v0.2: grafo dirigido recorrente, conexões ponderadas e propagação síncrona (em revisão).
-- [ ] ANA v0.3: memória/contexto em múltiplas escalas.
-- [ ] ANA v0.4: aprendizado supervisionado, por recompensa e descoberta de padrões.
+- [ ] ANA v0.2: grafo dirigido recorrente, conexões ponderadas e propagação síncrona (PR #7 em revisão).
+- [ ] ANA v0.3: memória temporal multiescala e contexto agregado (PR #8 dependente do #7).
+- [ ] ANA v0.4: mecanismos de aprendizado supervisionado, por recompensa e descoberta de padrões.
 - [ ] ANA v0.5: conexões dinâmicas, sob limites e testes de estabilidade.
 - [ ] ANA 1.0: interface experimental para integração com o Cognitive Core.
 

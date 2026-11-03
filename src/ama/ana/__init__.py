@@ -9,9 +9,12 @@ from ama.ana.benchmark import (
     run_plasticity_benchmark,
 )
 from ama.ana.forecast import (
+    ForecastAggregate,
     ForecastBenchmarkReport,
+    ForecastSuiteReport,
     ForecastVariant,
     run_forecast_benchmark,
+    run_forecast_suite,
 )
 from ama.ana.learning import (
     LearningParameters,
@@ -52,7 +55,9 @@ __all__ = [
     "BenchmarkReport",
     "BenchmarkVariant",
     "Connection",
+    "ForecastAggregate",
     "ForecastBenchmarkReport",
+    "ForecastSuiteReport",
     "ForecastVariant",
     "LearningParameters",
     "LearningResult",
@@ -75,6 +80,7 @@ __all__ = [
     "autonomous_step",
     "reward_step",
     "run_forecast_benchmark",
+    "run_forecast_suite",
     "run_noise_robustness_benchmark",
     "run_plasticity_benchmark",
     "step",

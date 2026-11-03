@@ -40,7 +40,7 @@ O roadmap é incremental. Datas são referências, não promessas de entrega.
 - [ ] ANA v0.2: grafo dirigido recorrente, conexões ponderadas e propagação síncrona (PR #7 em revisão).
 - [ ] ANA v0.3: memória temporal multiescala e contexto agregado (PR #8 dependente do #7).
 - [ ] ANA v0.4: regras de aprendizado supervisionado, por recompensa e previsão auto-supervisionada (PR #9 dependente do #8).
-- [ ] ANA v0.5: estudar plasticidade e conexões dinâmicas, com experimentos comparativos e limites.
+- [ ] ANA v0.5: plasticidade de peso, ativação por coativação persistente e poda com histerese em conjunto candidato explícito (PR #10 dependente do #9).
 - [ ] ANA 1.0: interface experimental para integração com o Cognitive Core.
 
 ## Plataforma AMA

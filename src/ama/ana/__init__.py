@@ -56,6 +56,13 @@ from ama.ana.unit import (
     NeuralUnitState,
     step,
 )
+from ama.ana.temporal_credit import (
+    TemporalCreditBenchmarkReport,
+    TemporalCreditPolicy,
+    TemporalCreditResult,
+    fit_recurrent_weight,
+    run_temporal_credit_benchmark,
+)
 from ama.ana.unit_forecast import (
     UnitForecastAggregate,
     UnitForecastReport,
@@ -99,6 +106,9 @@ __all__ = [
     "PlasticConnection",
     "PlasticityParameters",
     "PlasticityState",
+    "TemporalCreditBenchmarkReport",
+    "TemporalCreditPolicy",
+    "TemporalCreditResult",
     "UnitForecastAggregate",
     "UnitForecastReport",
     "UnitForecastSuiteReport",
@@ -112,6 +122,8 @@ __all__ = [
     "run_regime_shift_suite",
     "run_noise_robustness_benchmark",
     "run_plasticity_benchmark",
+    "fit_recurrent_weight",
+    "run_temporal_credit_benchmark",
     "run_unit_forecast_benchmark",
     "run_unit_forecast_suite",
     "step",

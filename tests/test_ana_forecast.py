@@ -90,3 +90,48 @@ def test_forecast_suite_reports_baseline_aggregate():
     values = tuple(item.persistence_baseline_mse for item in report.reports)
     assert report.mean_persistence_mse == pytest.approx(sum(values) / len(values))
     assert report.std_persistence_mse >= 0.0
+
+
+from ama.ana.forecast import run_regime_shift_benchmark
+
+
+def test_regime_shift_benchmark_is_deterministic():
+    assert run_regime_shift_benchmark() == run_regime_shift_benchmark()
+
+
+def test_regime_shift_benchmark_separates_adaptation_and_frozen_evaluation():
+    report = run_regime_shift_benchmark(
+        initial_train_steps=40, adaptation_steps=25, evaluation_steps=20
+    )
+    assert tuple(item.name for item in report.variants) == (
+        "frozen",
+        "fixed_adaptive",
+        "weight_only",
+        "structural",
+    )
+    assert report.initial_train_steps == 40
+    assert report.adaptation_steps == 25
+    assert report.evaluation_steps == 20
+    assert report.persistence_baseline_mse >= 0.0
+    for item in report.variants:
+        assert item.adaptation_mse >= 0.0
+        assert item.evaluation_mse >= 0.0
+        assert item.evaluation_mae >= 0.0
+        assert abs(item.final_edge_weight) <= 0.8
+        assert isinstance(item.final_edge_active, bool)
+
+
+@pytest.mark.parametrize(
+    "name",
+    ["initial_train_steps", "adaptation_steps", "evaluation_steps"],
+)
+@pytest.mark.parametrize("value", [0, 19, 10001, True, 1.5])
+def test_regime_shift_benchmark_rejects_invalid_phase_lengths(name, value):
+    with pytest.raises(ValueError, match=name):
+        run_regime_shift_benchmark(**{name: value})
+
+
+@pytest.mark.parametrize("seed", [True, 1.5, "29"])
+def test_regime_shift_benchmark_rejects_invalid_seed(seed):
+    with pytest.raises(ValueError, match="seed"):
+        run_regime_shift_benchmark(seed=seed)

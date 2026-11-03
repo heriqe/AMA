@@ -351,3 +351,221 @@ def run_forecast_suite(
         std_persistence_mse=_population_std(baseline_values),
         aggregates=tuple(aggregates),
     )
+
+
+@dataclass(frozen=True, slots=True)
+class RegimeShiftVariant:
+    """Forecast errors before and after a held-out temporal regime change."""
+
+    name: str
+    adaptation_mse: float
+    evaluation_mse: float
+    evaluation_mae: float
+    final_edge_weight: float
+    final_edge_active: bool
+
+
+@dataclass(frozen=True, slots=True)
+class RegimeShiftReport:
+    """Results from train, online-adaptation and frozen-evaluation phases."""
+
+    seed: int
+    initial_train_steps: int
+    adaptation_steps: int
+    evaluation_steps: int
+    persistence_baseline_mse: float
+    variants: tuple[RegimeShiftVariant, ...]
+
+
+def _regime_shift_series(
+    seed: int,
+    initial_train_steps: int,
+    adaptation_steps: int,
+    evaluation_steps: int,
+) -> tuple[float, ...]:
+    """Generate a bounded AR(2)-like series with one known coefficient shift."""
+    rng = random.Random(seed)
+    count = initial_train_steps + adaptation_steps + evaluation_steps + 1
+    values = [rng.uniform(-0.5, 0.5), rng.uniform(-0.5, 0.5)]
+    for index in range(2, count):
+        if index <= initial_train_steps:
+            first, second = 0.72, -0.18
+        else:
+            first, second = 0.15, 0.55
+        value = first * values[-1] + second * values[-2] + rng.gauss(0.0, 0.08)
+        values.append(max(-1.0, min(1.0, value)))
+    return tuple(values)
+
+
+def run_regime_shift_benchmark(
+    seed: int = 29,
+    initial_train_steps: int = 300,
+    adaptation_steps: int = 120,
+    evaluation_steps: int = 120,
+) -> RegimeShiftReport:
+    """Test online adaptation after a temporal regime shift.
+
+    The first AR(2)-like regime is used to train readouts. At the boundary,
+    coefficients change. A separate adaptation window permits online readout
+    and edge updates for adaptive strategies; the final evaluation window
+    freezes all learning. The frozen strategy receives no post-shift updates.
+    """
+    if isinstance(seed, bool) or not isinstance(seed, int):
+        raise ValueError("seed must be an integer")
+    for name, value in (
+        ("initial_train_steps", initial_train_steps),
+        ("adaptation_steps", adaptation_steps),
+        ("evaluation_steps", evaluation_steps),
+    ):
+        if isinstance(value, bool) or not isinstance(value, int):
+            raise ValueError(f"{name} must be an integer")
+        if value < 20 or value > 10_000:
+            raise ValueError(f"{name} must be between 20 and 10000")
+
+    values = _regime_shift_series(
+        seed, initial_train_steps, adaptation_steps, evaluation_steps
+    )
+    names = ("frozen", "fixed_adaptive", "weight_only", "structural")
+    readout_parameters = LearningParameters(
+        learning_rate=0.04,
+        eligibility_decay=0.8,
+        baseline_rate=0.05,
+        max_abs_weight=5.0,
+        max_abs_update=0.05,
+        max_abs_signal=10.0,
+    )
+    edge_parameters = PlasticityParameters(
+        learning_rate=0.04,
+        weight_decay=0.01,
+        max_abs_weight=0.8,
+        activation_threshold=0.15,
+        activation_steps=3,
+        prune_threshold=0.015,
+        prune_steps=8,
+        max_abs_activity=1.0,
+        initial_weight=0.05,
+    )
+    states = {
+        name: NetworkState.initial(
+            _network(0.0, False) if name == "structural" else _network(0.05, True)
+        )
+        for name in names
+    }
+    readouts = {name: LearningState.initial((0.0,) * 7) for name in names}
+    weight_only_weight = 0.05
+    structural = PlasticityState.initial((("sensor", "integrator"),))
+    adaptation_errors = {name: [] for name in names}
+    evaluation_errors = {name: [] for name in names}
+    persistence_squared = 0.0
+    adaptation_end = initial_train_steps + adaptation_steps
+    total_steps = initial_train_steps + adaptation_steps + evaluation_steps
+
+    for index in range(total_steps):
+        current, target = values[index], values[index + 1]
+        training = index < initial_train_steps
+        adapting = initial_train_steps <= index < adaptation_end
+        evaluating = index >= adaptation_end
+
+        for name in names:
+            if name in ("frozen", "fixed_adaptive"):
+                weight, active = 0.05, True
+            elif name == "weight_only":
+                weight, active = weight_only_weight, True
+            else:
+                edge = structural.connections[0]
+                weight, active = edge.weight, edge.active
+
+            next_state = step_network(
+                _network(weight, active),
+                states[name],
+                {"sensor": (current,), "integrator": (0.0,)},
+            )
+            features = _features(next_state)
+            prediction = sum(
+                coefficient * feature
+                for coefficient, feature in zip(readouts[name].weights, features)
+            )
+            bounded_prediction = max(-1.0, min(1.0, prediction))
+            error = bounded_prediction - target
+
+            if adapting:
+                adaptation_errors[name].append(error)
+            elif evaluating:
+                evaluation_errors[name].append(error)
+
+            # Frozen means no post-shift learning. Other strategies adapt their
+            # readout during the explicit adaptation window, never in evaluation.
+            if training or (adapting and name != "frozen"):
+                readouts[name] = supervised_step(
+                    readouts[name], features, target, readout_parameters
+                ).state
+
+            states[name] = next_state
+
+            # Edge changes are allowed during initial training and adaptation,
+            # then frozen throughout the final evaluation window.
+            if not evaluating and name in ("weight_only", "structural"):
+                activities = {
+                    "sensor": next_state.nodes[0].state.y[0],
+                    "integrator": next_state.nodes[1].state.y[0],
+                }
+                if name == "weight_only":
+                    pre, post = activities["sensor"], activities["integrator"]
+                    raw = (
+                        weight_only_weight
+                        + edge_parameters.learning_rate * pre * post
+                        - edge_parameters.weight_decay * weight_only_weight
+                    )
+                    weight_only_weight = max(
+                        -edge_parameters.max_abs_weight,
+                        min(edge_parameters.max_abs_weight, raw),
+                    )
+                else:
+                    structural = step_plasticity(
+                        structural, activities, edge_parameters
+                    )
+
+        if evaluating:
+            persistence_error = current - target
+            persistence_squared += persistence_error * persistence_error
+
+    variants = []
+    for name in names:
+        adapt = adaptation_errors[name]
+        evaluation = evaluation_errors[name]
+        if len(adapt) != adaptation_steps or len(evaluation) != evaluation_steps:
+            raise RuntimeError("regime-shift phase counts do not match protocol")
+        if name in ("frozen", "fixed_adaptive"):
+            final_weight, final_active = 0.05, True
+        elif name == "weight_only":
+            final_weight, final_active = weight_only_weight, True
+        else:
+            final = structural.connections[0]
+            final_weight, final_active = final.weight, final.active
+        adaptation_mse = sum(value * value for value in adapt) / len(adapt)
+        evaluation_mse = sum(value * value for value in evaluation) / len(evaluation)
+        evaluation_mae = sum(abs(value) for value in evaluation) / len(evaluation)
+        if not all(
+            math.isfinite(value)
+            for value in (adaptation_mse, evaluation_mse, evaluation_mae)
+        ):
+            raise RuntimeError("regime-shift metrics must be finite")
+        variants.append(
+            RegimeShiftVariant(
+                name=name,
+                adaptation_mse=adaptation_mse,
+                evaluation_mse=evaluation_mse,
+                evaluation_mae=evaluation_mae,
+                final_edge_weight=final_weight,
+                final_edge_active=final_active,
+            )
+        )
+
+    return RegimeShiftReport(
+        seed=seed,
+        initial_train_steps=initial_train_steps,
+        adaptation_steps=adaptation_steps,
+        evaluation_steps=evaluation_steps,
+        persistence_baseline_mse=persistence_squared / evaluation_steps,
+        variants=tuple(variants),
+    )

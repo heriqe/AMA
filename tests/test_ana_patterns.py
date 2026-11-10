@@ -1,0 +1,57 @@
+import pytest
+
+from ama.ana.patterns import (
+    PatternDiscoveryParameters,
+    PatternDiscoveryState,
+    assign_pattern,
+)
+
+
+def params(**kwargs):
+    values = dict(feature_size=1, max_prototypes=2, distance_threshold=0.2)
+    values.update(kwargs)
+    return PatternDiscoveryParameters(**values)
+
+
+def test_pattern_discovery_creates_and_updates_centroids():
+    p = params()
+    state = PatternDiscoveryState()
+    first = assign_pattern(state, (0.0,), p)
+    second = assign_pattern(first.state, (0.1,), p)
+    assert first.created is True
+    assert second.created is False
+    assert second.prototype_id == 0
+    assert second.state.prototypes[0].centroid == pytest.approx((0.05,))
+    assert second.state.prototypes[0].count == 2
+    assert state.prototypes == ()
+
+
+def test_pattern_discovery_creates_new_cluster_until_capacity():
+    p = params()
+    first = assign_pattern(PatternDiscoveryState(), (0.0,), p)
+    second = assign_pattern(first.state, (2.0,), p)
+    third = assign_pattern(second.state, (10.0,), p)
+    assert second.created is True
+    assert third.created is False
+    assert len(third.state.prototypes) == 2
+    assert third.prototype_id == 1
+
+
+def test_pattern_ties_choose_lowest_prototype_id():
+    p = params(distance_threshold=10.0)
+    state = PatternDiscoveryState(
+        prototypes=(
+            __import__("ama.ana.patterns", fromlist=["PatternPrototype"]).PatternPrototype(0, (0.0,), 1),
+            __import__("ama.ana.patterns", fromlist=["PatternPrototype"]).PatternPrototype(1, (2.0,), 1),
+        ),
+        next_id=2,
+    )
+    result = assign_pattern(state, (1.0,), p)
+    assert result.prototype_id == 0
+
+
+def test_pattern_dimensions_and_invalid_capacity_are_rejected():
+    with pytest.raises(ValueError, match="positive"):
+        PatternDiscoveryParameters(feature_size=1, max_prototypes=0, distance_threshold=1.0)
+    with pytest.raises(ValueError, match="length"):
+        assign_pattern(PatternDiscoveryState(), (1.0, 2.0), params())

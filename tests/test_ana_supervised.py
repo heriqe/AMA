@@ -32,3 +32,24 @@ def test_supervised_parameter_limit_rejects_update_without_clipping():
     )
     with pytest.raises(ValueError, match="exceeds configured limit"):
         train_readout_step(model, (1.0,), (-1.0,))
+
+
+
+def test_supervised_training_beats_constant_mean_baseline():
+    model = LinearReadoutParameters(
+        weights=((0.0,),), bias=(0.0,), learning_rate=0.05
+    )
+    samples = [(-1.0, -1.0), (0.0, 1.0), (1.0, 3.0)]
+    mean_target = sum(target for _, target in samples) / len(samples)
+    baseline_mse = sum((mean_target - target) ** 2 for _, target in samples) / len(samples)
+
+    trained = model
+    for _ in range(120):
+        for feature, target in samples:
+            trained = train_readout_step(trained, (feature,), (target,))
+
+    learned_mse = sum(
+        (predict_readout(trained, (feature,))[0] - target) ** 2
+        for feature, target in samples
+    ) / len(samples)
+    assert learned_mse < baseline_mse

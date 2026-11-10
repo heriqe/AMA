@@ -56,3 +56,19 @@ def test_pattern_dimensions_and_invalid_capacity_are_rejected():
         PatternDiscoveryParameters(feature_size=1, max_prototypes=0, distance_threshold=1.0)
     with pytest.raises(ValueError, match="length"):
         assign_pattern(PatternDiscoveryState(), (1.0, 2.0), params())
+
+
+
+def test_pattern_discovery_separates_two_synthetic_groups():
+    p = params(distance_threshold=0.3)
+    state = PatternDiscoveryState()
+    assignments = []
+    for value in (0.0, 0.1, 5.0, 5.1):
+        result = assign_pattern(state, (value,), p)
+        state = result.state
+        assignments.append(result.prototype_id)
+
+    assert assignments[0] == assignments[1]
+    assert assignments[2] == assignments[3]
+    assert assignments[0] != assignments[2]
+    assert len(state.prototypes) == 2

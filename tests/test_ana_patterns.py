@@ -3,6 +3,7 @@ import pytest
 from ama.ana.patterns import (
     PatternDiscoveryParameters,
     PatternDiscoveryState,
+    PatternPrototype,
     assign_pattern,
 )
 
@@ -41,8 +42,8 @@ def test_pattern_ties_choose_lowest_prototype_id():
     p = params(distance_threshold=10.0)
     state = PatternDiscoveryState(
         prototypes=(
-            __import__("ama.ana.patterns", fromlist=["PatternPrototype"]).PatternPrototype(0, (0.0,), 1),
-            __import__("ama.ana.patterns", fromlist=["PatternPrototype"]).PatternPrototype(1, (2.0,), 1),
+            PatternPrototype(0, (0.0,), 1),
+            PatternPrototype(1, (2.0,), 1),
         ),
         next_id=2,
     )

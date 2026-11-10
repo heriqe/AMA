@@ -133,3 +133,18 @@ def test_same_inputs_are_deterministic():
     assert step_multiscale_memory(state, (0.3,), p) == step_multiscale_memory(
         state, (0.3,), p
     )
+
+
+
+def test_arbitrary_precision_integer_weights_are_normalized():
+    p = params(context_weights=(10**400, 10**400))
+    state = MultiScaleMemoryState.initial(p, 1)
+    result = step_multiscale_memory(state, (0.6,), p)
+    assert result.context == pytest.approx((0.36,))
+
+
+def test_mixed_float_and_arbitrary_precision_weights_are_supported():
+    p = params(context_weights=(10**400, 1e308))
+    state = MultiScaleMemoryState.initial(p, 1)
+    result = step_multiscale_memory(state, (0.6,), p)
+    assert result.context == pytest.approx((0.6,))

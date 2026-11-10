@@ -30,6 +30,11 @@ class LinearReadoutParameters:
     max_abs_parameter: float = 1_000_000.0
 
     def __post_init__(self) -> None:
+        limit = _finite(self.max_abs_parameter, "max_abs_parameter")
+        if limit <= 0.0:
+            raise ValueError("max_abs_parameter must be positive")
+        if _finite(self.learning_rate, "learning_rate") <= 0.0:
+            raise ValueError("learning_rate must be positive")
         if not self.weights or not self.bias:
             raise ValueError("weights and bias must not be empty")
         input_size = len(self.weights[0])
@@ -39,15 +44,11 @@ class LinearReadoutParameters:
             raise ValueError("weights rows must match bias size")
         for row in self.weights:
             for value in row:
-                if abs(_finite(value, "weights")) > self.max_abs_parameter:
+                if abs(_finite(value, "weights")) > limit:
                     raise ValueError("parameter magnitude exceeds configured limit")
         for value in self.bias:
-            if abs(_finite(value, "bias")) > self.max_abs_parameter:
+            if abs(_finite(value, "bias")) > limit:
                 raise ValueError("parameter magnitude exceeds configured limit")
-        if _finite(self.learning_rate, "learning_rate") <= 0.0:
-            raise ValueError("learning_rate must be positive")
-        if _finite(self.max_abs_parameter, "max_abs_parameter") <= 0.0:
-            raise ValueError("max_abs_parameter must be positive")
 
 
 def predict_readout(parameters: LinearReadoutParameters, features: Vector) -> Vector:

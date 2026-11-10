@@ -140,7 +140,7 @@ O resultado informa o ID associado, a distância e se um protótipo foi criado. 
 ### 5.4 Contratos
 
 - Dimensão fixa e vetores finitos.
-- (K_{max}\geq1\), limite de distância ao quadrado finito e não negativo.
+- (K_{max}\geq1\), parâmetro `squared_distance_threshold` finito e não negativo.
 - Contagens inteiras positivas.
 - Número de protótipos nunca excede (K_{max}\).
 - Atualização determinística e sem mutação do estado anterior.

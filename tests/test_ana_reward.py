@@ -35,7 +35,8 @@ def test_reward_eligibility_decays_and_carries_across_actions():
     state = RewardLearningState.initial(p)
     first = update_reward(state, (1.0,), 1, 1.0, p)
     second = update_reward(first, (1.0,), 0, 0.0, p)
-    assert second.eligibility == pytest.approx(((1.0,), (0.5,)))
+    assert second.eligibility[0] == pytest.approx((1.0,))
+    assert second.eligibility[1] == pytest.approx((0.5,))
     assert second.weights[0] == pytest.approx((-0.05,))
     assert second.weights[1] == pytest.approx((0.075,))
 

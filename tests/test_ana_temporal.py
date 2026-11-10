@@ -76,7 +76,7 @@ def test_retention_must_increase_from_fast_to_slow():
 def test_retention_must_be_finite_and_in_range():
     with pytest.raises(ValueError, match="finite"):
         params(retention=(0.2, math.nan))
-    with pytest.raises(ValueError, match="\[0, 1\)"):
+    with pytest.raises(ValueError, match=r"\[0, 1\)"):
         params(retention=(0.2, 1.0))
 
 

@@ -21,8 +21,14 @@ class PatternDiscoveryParameters:
             raise ValueError("feature_size must be a positive integer")
         if isinstance(self.max_prototypes, bool) or not isinstance(self.max_prototypes, int) or self.max_prototypes < 1:
             raise ValueError("max_prototypes must be a positive integer")
-        if isinstance(self.distance_threshold, bool) or not isinstance(self.distance_threshold, (int, float)) or not math.isfinite(self.distance_threshold) or self.distance_threshold < 0.0:
+        if isinstance(self.distance_threshold, bool) or not isinstance(self.distance_threshold, (int, float)):
             raise ValueError("distance_threshold must be finite and non-negative")
+        try:
+            threshold = float(self.distance_threshold)
+        except OverflowError as error:
+            raise ValueError("distance_threshold must be finite and non-negative") from error
+        if not math.isfinite(threshold) or threshold < 0.0 or not math.isfinite(threshold * threshold):
+            raise ValueError("distance_threshold must be finite and non-negative with a finite square")
 
 
 @dataclass(frozen=True, slots=True)
@@ -62,7 +68,9 @@ def assign_pattern(
     if len(state.prototypes) > parameters.max_prototypes:
         raise ValueError("state exceeds configured prototype capacity")
     ids = [item.prototype_id for item in state.prototypes]
-    if len(ids) != len(set(ids)) or any(item < 0 for item in ids):
+    if any(isinstance(item, bool) or not isinstance(item, int) or item < 0 for item in ids):
+        raise ValueError("prototype IDs must be unique non-negative integers")
+    if len(ids) != len(set(ids)):
         raise ValueError("prototype IDs must be unique non-negative integers")
     if any(isinstance(item.count, bool) or not isinstance(item.count, int) or item.count < 1 for item in state.prototypes):
         raise ValueError("prototype counts must be positive integers")

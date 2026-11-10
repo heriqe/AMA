@@ -14,15 +14,15 @@ class PatternDiscoveryParameters:
 
     feature_size: int
     max_prototypes: int
-    distance_threshold: float
+    squared_distance_threshold: float
 
     def __post_init__(self) -> None:
         if isinstance(self.feature_size, bool) or not isinstance(self.feature_size, int) or self.feature_size < 1:
             raise ValueError("feature_size must be a positive integer")
         if isinstance(self.max_prototypes, bool) or not isinstance(self.max_prototypes, int) or self.max_prototypes < 1:
             raise ValueError("max_prototypes must be a positive integer")
-        if isinstance(self.distance_threshold, bool) or not isinstance(self.distance_threshold, (int, float)):
-            raise ValueError("distance_threshold must be finite and non-negative")
+        if isinstance(self.squared_distance_threshold, bool) or not isinstance(self.distance_threshold, (int, float)):
+            raise ValueError("squared_distance_threshold must be finite and non-negative")
         try:
             threshold = float(self.distance_threshold)
         except OverflowError as error:

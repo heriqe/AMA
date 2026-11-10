@@ -74,10 +74,11 @@ A política é determinística nesta versão: seleciona o maior escore, com dese
 
 ### 4.2 Elegibilidade e atualização
 
-Após o chamador informar a ação executada (a_t), o vetor de características e a recompensa (r_t), a elegibilidade da ação é atualizada:
+O estado de elegibilidade é uma matriz (E_t \in \mathbb{R}^{A\times d}), uma linha por ação. Após o chamador informar a ação executada (a_t), o vetor de características e a recompensa (r_t), atualiza-se:
 
 \[
-e_t = \lambda e_{t-1} + \mathbf{1}[a_t]x_t
+E_t = \lambda E_{t-1}; \qquad
+E_t[a_t,:] = E_t[a_t,:] + x_t^T
 \]
 
 A baseline escalar móvel é atualizada por:
@@ -86,18 +87,19 @@ A baseline escalar móvel é atualizada por:
 b_t = b_{t-1} + \beta(r_t-b_{t-1})
 \]
 
-A atualização da linha de pesos da ação é:
+A vantagem usa a baseline anterior:
 
 \[
-W'_{a_t} = W_{a_t} + \alpha(r_t-b_t)e_t
+\delta_t = r_t-b_{t-1}
 \]
 
-As demais linhas permanecem iguais. A implementação deve definir claramente se a atualização usa a baseline anterior ou a baseline recém-calculada; para esta especificação, usa-se a baseline anterior (b_{t-1}) no termo de vantagem, e só depois calcula-se (b_t). A equação normativa fica:
+A matriz de pesos é atualizada por:
 
 \[
-\delta_t = r_t-b_{t-1}, \qquad
-W'_{a_t}=W_{a_t}+\alpha\delta_t e_t
+W' = W + \alpha\delta_t E_t
 \]
+
+Assim, as ações escolhidas recentemente acumulam elegibilidade com decaimento; todas as linhas com elegibilidade não nula podem ser atualizadas. O resultado retorna os novos pesos, a nova elegibilidade e a nova baseline. Não há gradiente através do ambiente.
 
 ### 4.3 Contratos
 

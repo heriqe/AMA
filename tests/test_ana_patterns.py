@@ -9,7 +9,7 @@ from ama.ana.patterns import (
 
 
 def params(**kwargs):
-    values = dict(feature_size=1, max_prototypes=2, distance_threshold=0.2)
+    values = dict(feature_size=1, max_prototypes=2, squared_distance_threshold=0.2)
     values.update(kwargs)
     return PatternDiscoveryParameters(**values)
 
@@ -39,7 +39,7 @@ def test_pattern_discovery_creates_new_cluster_until_capacity():
 
 
 def test_pattern_ties_choose_lowest_prototype_id():
-    p = params(distance_threshold=10.0)
+    p = params(squared_distance_threshold=10.0)
     state = PatternDiscoveryState(
         prototypes=(
             PatternPrototype(0, (0.0,), 1),
@@ -53,14 +53,14 @@ def test_pattern_ties_choose_lowest_prototype_id():
 
 def test_pattern_dimensions_and_invalid_capacity_are_rejected():
     with pytest.raises(ValueError, match="positive"):
-        PatternDiscoveryParameters(feature_size=1, max_prototypes=0, distance_threshold=1.0)
+        PatternDiscoveryParameters(feature_size=1, max_prototypes=0, squared_distance_threshold=1.0)
     with pytest.raises(ValueError, match="length"):
         assign_pattern(PatternDiscoveryState(), (1.0, 2.0), params())
 
 
 
 def test_pattern_discovery_separates_two_synthetic_groups():
-    p = params(distance_threshold=0.3)
+    p = params(squared_distance_threshold=0.3)
     state = PatternDiscoveryState()
     assignments = []
     for value in (0.0, 0.1, 5.0, 5.1):
@@ -74,6 +74,6 @@ def test_pattern_discovery_separates_two_synthetic_groups():
     assert len(state.prototypes) == 2
 
 
-def test_pattern_distance_threshold_must_have_finite_square():
-    with pytest.raises(ValueError, match="distance_threshold"):
-        params(distance_threshold=10**400)
+def test_pattern_squared_distance_threshold_must_have_finite_square():
+    with pytest.raises(ValueError, match="squared_distance_threshold"):
+        params(squared_distance_threshold=10**400)

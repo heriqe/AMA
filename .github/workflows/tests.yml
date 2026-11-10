@@ -2,9 +2,15 @@ name: Tests
 
 on:
   push:
-    branches: ["main", "foundation/**", "ana/**"]
+    branches:
+      - "main"
+      - "foundation/**"
+      - "ana/**"
+      - "openhands/**"
+      - "maintenance/**"
   pull_request:
-    branches: ["main"]
+    branches:
+      - "main"
 
 permissions:
   contents: read

@@ -26,7 +26,7 @@ O roadmap é incremental. Datas são referências, não promessas de entrega. Um
 
 ## Cognitive Core v0.3 — parcial
 
-- [x] Decisão multicritério com orçamento, risco e incerteza — implementação integrada.
+- [ ] Decisão multicritério com orçamento, risco e incerteza — não implementada; o planejador atual ordena dependências e as regras de orçamento são apenas gates de autorização.
 - [ ] Avaliação de resultados e registro de experiências.
 - [ ] Execução em sandbox, sem ações externas por padrão.
 - [ ] Auditoria e trilha de decisões.

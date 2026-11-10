@@ -72,3 +72,8 @@ def test_pattern_discovery_separates_two_synthetic_groups():
     assert assignments[2] == assignments[3]
     assert assignments[0] != assignments[2]
     assert len(state.prototypes) == 2
+
+
+def test_pattern_distance_threshold_must_have_finite_square():
+    with pytest.raises(ValueError, match="distance_threshold"):
+        params(distance_threshold=10**400)

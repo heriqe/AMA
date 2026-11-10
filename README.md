@@ -71,7 +71,7 @@ pytest
 |---|---|
 | Fundação e empacotamento Python | Integrado |
 | Cognitive Core v0.2 — fatos, política, inferências e pipeline | Integrado |
-| Cognitive Core v0.3 — decisão multicritério | Parcialmente integrado; avaliação e execução segura pendentes |
+| Cognitive Core v0.3 — decisão multicritério | Não implementado; avaliação multicritério e execução segura pendentes |
 | ANA v0.1 — unidade neural isolada | Integrada |
 | ANA v0.2 — grafo recorrente e propagação síncrona | Integrada |
 | ANA v0.3 e versões seguintes | Desenvolvimento sequencial; não considerar integradas até revisão e merge aprovados |

@@ -8,6 +8,11 @@ from dataclasses import dataclass
 from ama.ana.unit import Vector, _as_vector
 
 
+def _is_finite_number(value: int | float) -> bool:
+    """Integers are finite by definition and may exceed float's range."""
+    return isinstance(value, int) or math.isfinite(value)
+
+
 @dataclass(frozen=True, slots=True)
 class MultiScaleMemoryParameters:
     """Fixed decay rates and contribution weights for temporal traces."""
@@ -30,7 +35,7 @@ class MultiScaleMemoryParameters:
         for value in self.retention:
             if isinstance(value, bool) or not isinstance(value, (int, float)):
                 raise ValueError("retention values must be numeric")
-            if not math.isfinite(value) or not 0.0 <= value < 1.0:
+            if not _is_finite_number(value) or not 0.0 <= value < 1.0:
                 raise ValueError("retention values must be finite and in [0, 1)")
         if any(a >= b for a, b in zip(self.retention, self.retention[1:])):
             raise ValueError("retention values must increase from fast to slow scales")
@@ -38,7 +43,7 @@ class MultiScaleMemoryParameters:
         for value in self.context_weights:
             if isinstance(value, bool) or not isinstance(value, (int, float)):
                 raise ValueError("context weights must be numeric")
-            if not math.isfinite(value) or value < 0.0:
+            if not _is_finite_number(value) or value < 0.0:
                 raise ValueError("context weights must be finite and non-negative")
         if not any(value > 0.0 for value in self.context_weights):
             raise ValueError("at least one context weight must be positive")
@@ -70,9 +75,20 @@ class MultiScaleMemoryResult:
 
 
 def _normalized_weights(weights: tuple[float, ...]) -> tuple[float, ...]:
-    """Normalize non-negative weights without overflowing their raw sum."""
+    """Normalize non-negative weights, including arbitrary-precision integers."""
     maximum = max(weights)
-    scaled = tuple(value / maximum for value in weights)
+    if isinstance(maximum, int):
+        scaled_values: list[float] = []
+        for value in weights:
+            if isinstance(value, int):
+                scaled_values.append(value / maximum)
+            else:
+                # Avoid converting a huge integer denominator to float first.
+                numerator, denominator = value.as_integer_ratio()
+                scaled_values.append(numerator / (denominator * maximum))
+        scaled = tuple(scaled_values)
+    else:
+        scaled = tuple(value / maximum for value in weights)
     total = math.fsum(scaled)
     return tuple(value / total for value in scaled)
 

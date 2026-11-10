@@ -76,3 +76,8 @@ def test_reward_learning_improves_over_initially_preferred_bad_action():
     # The fixed initial policy always chose action 1 and received -1.
     assert sum(rewards[-10:]) / 10 > -1.0
     assert select_action(state, (1.0,), p) == 0
+
+
+def test_reward_parameter_ranges_reject_decay_equal_to_one():
+    with pytest.raises(ValueError, match="eligibility_decay"):
+        params(eligibility_decay=1.0)

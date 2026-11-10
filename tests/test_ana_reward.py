@@ -57,3 +57,22 @@ def test_reward_invalid_action_reward_and_dimensions_are_rejected():
         update_reward(state, (1.0,), 0, float("nan"), p)
     with pytest.raises(ValueError, match="length"):
         action_scores(state, (1.0, 2.0), p)
+
+
+
+def test_reward_learning_improves_over_initially_preferred_bad_action():
+    p = params(learning_rate=0.1, baseline_rate=0.1, eligibility_decay=0.5)
+    state = RewardLearningState(
+        weights=((0.0,), (1.0,)),
+        eligibility=((0.0,), (0.0,)),
+    )
+    rewards = []
+    for _ in range(30):
+        action = select_action(state, (1.0,), p)
+        reward = 1.0 if action == 0 else -1.0
+        rewards.append(reward)
+        state = update_reward(state, (1.0,), action, reward, p)
+
+    # The fixed initial policy always chose action 1 and received -1.
+    assert sum(rewards[-10:]) / 10 > -1.0
+    assert select_action(state, (1.0,), p) == 0

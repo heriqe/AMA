@@ -11,7 +11,10 @@ from ama.ana.unit import Matrix, Vector, _as_vector
 def _finite(value: object, name: str) -> float:
     if isinstance(value, bool) or not isinstance(value, (int, float)):
         raise ValueError(f"{name} must contain numeric values")
-    converted = float(value)
+    try:
+        converted = float(value)
+    except OverflowError as error:
+        raise ValueError(f"{name} must contain finite values") from error
     if not math.isfinite(converted):
         raise ValueError(f"{name} must contain finite values")
     return converted

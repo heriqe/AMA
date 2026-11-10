@@ -74,6 +74,17 @@ def test_pattern_discovery_separates_two_synthetic_groups():
     assert len(state.prototypes) == 2
 
 
-def test_pattern_squared_distance_threshold_must_have_finite_square():
+def test_pattern_squared_distance_threshold_must_be_finite():
     with pytest.raises(ValueError, match="squared_distance_threshold"):
         params(squared_distance_threshold=10**400)
+
+
+def test_pattern_uses_configured_squared_distance_threshold_directly():
+    p = PatternDiscoveryParameters(
+        feature_size=2, max_prototypes=2, squared_distance_threshold=0.2
+    )
+    first = assign_pattern(PatternDiscoveryState(), (0.0, 0.0), p)
+    second = assign_pattern(first.state, (0.3, 0.1), p)
+    assert second.created is False
+    assert second.prototype_id == first.prototype_id
+    assert second.distance_squared == pytest.approx(0.1)

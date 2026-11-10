@@ -8,7 +8,7 @@ from ama.ana.network import (
     NodeState,
     step_network,
 )
-from ama.ana.unit import (
+from ama.ana.temporal import (\n    MultiScaleMemoryParameters,\n    MultiScaleMemoryResult,\n    MultiScaleMemoryState,\n    step_multiscale_memory,\n)\nfrom ama.ana.unit import (
     NeuralUnitInput,
     NeuralUnitParameters,
     NeuralUnitState,
@@ -18,12 +18,12 @@ from ama.ana.unit import (
 __all__ = [
     "Connection",
     "NetworkDefinition",
-    "NetworkNode",
+    "MultiScaleMemoryParameters",\n    "MultiScaleMemoryResult",\n    "MultiScaleMemoryState",\n    "NetworkNode",
     "NetworkState",
     "NodeState",
     "NeuralUnitInput",
     "NeuralUnitParameters",
     "NeuralUnitState",
     "step",
-    "step_network",
+    "step_multiscale_memory",\n    "step_network",
 ]

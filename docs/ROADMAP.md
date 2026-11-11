@@ -1,6 +1,6 @@
 # Roadmap do AMA
 
-**Roadmap atualizado — 2026-11-02**
+**Roadmap atualizado — 2026-11-11**
 
 O roadmap é incremental. Datas são referências, não promessas de entrega.
 
@@ -34,14 +34,23 @@ O roadmap é incremental. Datas são referências, não promessas de entrega.
 
 ## ANA — linha de pesquisa independente
 
-- [x] ANA v0.1: especificação matemática da unidade neural.
-- [x] ANA v0.1: protótipo de transição de uma unidade isolada.
-- [x] ANA v0.1 integrada à `main`.
-- [ ] ANA v0.2: grafo dirigido recorrente, conexões ponderadas e propagação síncrona (em revisão).
-- [ ] ANA v0.3: memória/contexto em múltiplas escalas.
-- [ ] ANA v0.4: aprendizado supervisionado, por recompensa e descoberta de padrões.
-- [ ] ANA v0.5: conexões dinâmicas, sob limites e testes de estabilidade.
-- [ ] ANA 1.0: interface experimental para integração com o Cognitive Core.
+- [x] ANA v0.1: especificação e protótipo da unidade neural isolada, integrados à `main`.
+- [x] ANA v0.2: grafo dirigido recorrente, conexões ponderadas e propagação síncrona, integrados à `main`.
+- [x] ANA v0.3: memória temporal multiescala e contexto, integrados à `main` pelo PR #26.
+
+### ANA v0.4 — em revisão na PR #27
+
+- [x] Especificação matemática dos mecanismos supervisionado, por recompensa e descoberta incremental.
+- [x] Implementação isolada dos três mecanismos, sem acoplamento automático à rede recorrente ou à memória.
+- [x] Testes unitários determinísticos, incluindo baselines sintéticos e limites numéricos.
+- [x] GitHub Actions #217: suíte completa aprovada no commit `e4d243c71621fa7664c8681aa23ddf5810f17776`.
+- [x] Revisão automatizada Codex concluída sem findings no mesmo commit; não substitui revisão humana.
+- [ ] Revisão humana, aprovação explícita e integração à `main`.
+
+### Próximas versões
+
+- [ ] ANA v0.5: plasticidade/conexões dinâmicas, sob limites e testes de estabilidade. Bloqueada até a v0.4 ser aprovada e integrada.
+- [ ] ANA 1.0: interface experimental para integração com o Cognitive Core, após validação das etapas anteriores.
 
 ## Plataforma AMA
 
@@ -54,4 +63,4 @@ O roadmap é incremental. Datas são referências, não promessas de entrega.
 
 ## Critérios para avançar
 
-Nenhuma fase é considerada concluída apenas porque os arquivos existem. Exigir testes automatizados, documentação atualizada, limites conhecidos e evidência reproduzível de funcionamento.
+Nenhuma fase é considerada concluída apenas porque os arquivos existem. Exigir testes automatizados, documentação atualizada, limites conhecidos, revisão e evidência reproduzível de funcionamento. A v0.4 permanece proposta até a aprovação humana e integração; o sucesso de CI e a revisão automatizada não autorizam merge.

@@ -3,7 +3,7 @@
 **Projeto:** AMA — Autonomous Money AI  
 **Linha:** ANA — AMA Neural Architecture  
 **Versão:** 0.4  
-**Estado:** especificação proposta; implementação e validação pendentes  
+**Estado:** implementação experimental preparada na PR #27; aguardando revisão e aprovação humana, ainda não integrada à `main`  
 **Compatibilidade:** Python 3.11+, biblioteca padrão, sem serviço externo ou GPU
 
 ## 1. Objetivo
@@ -168,6 +168,8 @@ O resultado informa o ID associado, a distância e se um protótipo foi criado. 
 - Comparar com baseline de um único centroide.
 - Testar capacidade máxima, empate, dimensões, não finitos e determinismo.
 
+**Protocolo de referência coberto por teste:** observações unidimensionais `(0.0, 0.1)` do grupo A e `(5.0, 5.1)` do grupo B, com `squared_distance_threshold=0.3` e capacidade de dois protótipos. A pureza é definida como a soma do maior número de rótulos verdadeiros em cada cluster, dividida pelo total de observações. O agrupamento incremental obtém pureza 1,0; o baseline de um único centroide, que atribui todas as observações ao mesmo cluster, obtém 0,5 no conjunto balanceado. É uma comparação sintética mínima e determinística, não uma evidência de generalização.
+
 ## 7. Arquitetura de software proposta
 
 Manter três módulos independentes, com dataclasses imutáveis para parâmetros, estado e resultado. As funções de atualização recebem explicitamente estado, observação/feedback e parâmetros e retornam novo estado. Não adicionar dependência NumPy nesta versão inicial.
@@ -191,4 +193,14 @@ A v0.4 não implementa backpropagation através da rede recorrente, ajuste autom
 
 ## 10. Próxima etapa
 
-Após aprovação desta especificação, implementar e validar os três mecanismos em pequenos módulos isolados. Só depois dos testes e baselines poderá ser considerada a ANA v0.4 concluída. A v0.5 permanece bloqueada até aprovação e integração explícita da v0.4.
+A implementação dos três mecanismos e seus testes está preparada na PR #27. A v0.4 só poderá ser considerada concluída após revisão do head atualizado, aprovação humana explícita e integração à `main`. A v0.5 permanece bloqueada até esse momento.
+
+## 11. Estado de implementação e validação
+
+Registro em 2026-11-11:
+
+- A PR #27 contém `supervised.py`, `reward.py` e `patterns.py`, seus exports e testes específicos.
+- A GitHub Actions #217 concluiu com sucesso a suíte completa no commit de código `e4d243c71621fa7664c8681aa23ddf5810f17776`.
+- A revisão automatizada Codex desse mesmo commit foi concluída sem findings; isso não equivale à aprovação humana.
+- A PR #27 continua aberta, não integrada, e aguarda aprovação humana. Alterações posteriores de documentação/testes exigem nova validação do head atualizado.
+- Os mecanismos permanecem isolados: não atualizam automaticamente os pesos da rede v0.2 ou os traços de memória v0.3, não executam ações e não demonstram inteligência geral.

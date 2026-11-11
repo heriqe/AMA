@@ -59,8 +59,9 @@ def test_pattern_dimensions_and_invalid_capacity_are_rejected():
 
 
 
-def test_pattern_discovery_separates_two_synthetic_groups():
+def test_pattern_discovery_separates_two_synthetic_groups_against_one_centroid():
     p = params(squared_distance_threshold=0.3)
+    labels = ("A", "A", "B", "B")
     state = PatternDiscoveryState()
     assignments = []
     for value in (0.0, 0.1, 5.0, 5.1):
@@ -72,6 +73,19 @@ def test_pattern_discovery_separates_two_synthetic_groups():
     assert assignments[2] == assignments[3]
     assert assignments[0] != assignments[2]
     assert len(state.prototypes) == 2
+
+    def purity(cluster_ids):
+        clusters = {}
+        for cluster_id, label in zip(cluster_ids, labels):
+            clusters.setdefault(cluster_id, {}).setdefault(label, 0)
+            clusters[cluster_id][label] += 1
+        return sum(max(counts.values()) for counts in clusters.values()) / len(labels)
+
+    learned_purity = purity(assignments)
+    one_centroid_baseline_purity = purity((0, 0, 0, 0))
+    assert learned_purity == 1.0
+    assert one_centroid_baseline_purity == 0.5
+    assert learned_purity > one_centroid_baseline_purity
 
 
 def test_pattern_squared_distance_threshold_must_be_finite():

@@ -1,6 +1,6 @@
 # Roadmap do AMA
 
-**Roadmap atualizado — 2026-11-11**
+**Roadmap atualizado — 2026-11-12**
 
 O roadmap é incremental. Datas são referências, não promessas de entrega.
 
@@ -24,13 +24,15 @@ O roadmap é incremental. Datas são referências, não promessas de entrega.
 - [x] Pipeline percepção → conhecimento → raciocínio → memória.
 - [x] Integração na `main` após revisão e testes.
 
-## Cognitive Core v0.3
+## Cognitive Core v0.3 — não implementada
 
-- [x] Decisão multicritério com orçamento, risco e incerteza — implementação integrada.
+- [ ] Decisão multicritério com orçamento, risco e incerteza.
 - [ ] Avaliação de resultados e registro de experiências.
 - [ ] Execução em sandbox, sem ações externas por padrão.
 - [ ] Auditoria e trilha de decisões.
 - [ ] Interfaces explícitas de autorização e limites operacionais.
+
+**Estado real:** o planejador atual ordena tarefas por dependências; as regras de orçamento atuam como gates de autorização. Nenhum desses mecanismos classifica alternativas por uma pontuação multicritério. Não declarar essa capacidade como implementada até existir código, testes e revisão correspondentes.
 
 ## ANA — linha de pesquisa independente
 
@@ -43,13 +45,14 @@ O roadmap é incremental. Datas são referências, não promessas de entrega.
 - [x] Especificação matemática dos mecanismos supervisionado, por recompensa e descoberta incremental.
 - [x] Implementação isolada dos três mecanismos, sem acoplamento automático à rede recorrente ou à memória.
 - [x] Testes unitários determinísticos, incluindo baselines sintéticos e limites numéricos.
-- [x] GitHub Actions #217: suíte completa aprovada no commit `e4d243c71621fa7664c8681aa23ddf5810f17776`.
-- [x] Revisão automatizada Codex concluída sem findings no mesmo commit; não substitui revisão humana.
+- [x] GitHub Actions #218: suíte completa aprovada no head `39719d810b8242b5e665d7f9312d9f17d9bf22c7`.
+- [ ] Revisão automatizada atualizada para o head atual: a revisão Codex registrada examinou um commit anterior (`03120b8582)); não equivale à revisão do head atual.
 - [ ] Revisão humana, aprovação explícita e integração à `main`.
 
 ### Próximas versões
 
 - [ ] ANA v0.5: plasticidade/conexões dinâmicas, sob limites e testes de estabilidade. Bloqueada até a v0.4 ser aprovada e integrada.
+- [ ] ANA v0.6–v0.8: etapas posteriores, a especificar e validar sequencialmente, sem antecipar implementação.
 - [ ] ANA 1.0: interface experimental para integração com o Cognitive Core, após validação das etapas anteriores.
 
 ## Plataforma AMA

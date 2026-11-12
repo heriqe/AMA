@@ -46,7 +46,7 @@ O roadmap é incremental. Datas são referências, não promessas de entrega.
 - [x] Implementação isolada dos três mecanismos, sem acoplamento automático à rede recorrente ou à memória.
 - [x] Testes unitários determinísticos, incluindo baselines sintéticos e limites numéricos.
 - [x] GitHub Actions #218: suíte completa aprovada no head `39719d810b8242b5e665d7f9312d9f17d9bf22c7`.
-- [ ] Revisão automatizada atualizada para o head atual: a revisão Codex registrada examinou um commit anterior (`03120b8582)); não equivale à revisão do head atual.
+- [ ] Revisão automatizada atualizada para o head atual: a revisão Codex registrada examinou um commit anterior (`03120b8582`); não equivale à revisão do head atual.
 - [ ] Revisão humana, aprovação explícita e integração à `main`.
 
 ### Próximas versões

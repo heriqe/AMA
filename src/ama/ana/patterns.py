@@ -109,16 +109,19 @@ def assign_pattern(
     if ids and state.next_id <= max(ids):
         raise ValueError("next_id must exceed all existing prototype IDs")
 
-    distances = tuple(
-        (
-            math.fsum(
-                (value - center) ** 2
-                for value, center in zip(x, item.centroid)
-            ),
-            item.prototype_id,
+    try:
+        distances = tuple(
+            (
+                math.fsum(
+                    (value - center) ** 2
+                    for value, center in zip(x, item.centroid)
+                ),
+                item.prototype_id,
+            )
+            for item in state.prototypes
         )
-        for item in state.prototypes
-    )
+    except OverflowError as error:
+        raise ValueError("distance calculation overflowed") from error
     if any(not math.isfinite(distance) for distance, _ in distances):
         raise ValueError("distance calculation overflowed")
     if not distances:

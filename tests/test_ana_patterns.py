@@ -113,3 +113,13 @@ def test_pattern_uses_configured_squared_distance_threshold_directly():
     assert second.created is False
     assert second.prototype_id == first.prototype_id
     assert second.distance_squared == pytest.approx(0.1)
+
+
+
+def test_pattern_distance_sum_overflow_is_reported_as_value_error():
+    state = PatternDiscoveryState(
+        prototypes=(PatternPrototype(prototype_id=0, centroid=(0.0, 0.0), count=1),),
+        next_id=1,
+    )
+    with pytest.raises(ValueError, match="distance calculation overflowed"):
+        assign_pattern(state, (1e154, 1e154), params(feature_size=2))

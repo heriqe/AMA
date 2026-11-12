@@ -51,7 +51,7 @@ python -m venv .venv
 Windows PowerShell:
 
 ```powershell
-.venv\\Scripts\\Activate.ps1
+.venv\Scripts\Activate.ps1
 python -m pip install -e ".[dev]"
 pytest
 ```

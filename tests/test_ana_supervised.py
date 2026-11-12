@@ -35,6 +35,19 @@ def test_supervised_parameter_limit_rejects_update_without_clipping():
 
 
 
+def test_supervised_model_snapshots_mutable_constructor_inputs():
+    weights = [[0.0]]
+    bias = [0.0]
+    model = LinearReadoutParameters(
+        weights=weights, bias=bias, learning_rate=0.1
+    )
+
+    weights[0][0] = 99.0
+    bias[0] = 99.0
+    assert model.weights == ((0.0,),)
+    assert model.bias == (0.0,)
+
+
 def test_supervised_training_beats_constant_mean_baseline():
     model = LinearReadoutParameters(
         weights=((0.0,),), bias=(0.0,), learning_rate=0.05

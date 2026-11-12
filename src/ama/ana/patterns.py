@@ -40,6 +40,14 @@ class PatternPrototype:
     centroid: Vector
     count: int
 
+    def __post_init__(self) -> None:
+        # Keep the centroid independent from mutable caller-owned sequences.
+        try:
+            frozen_centroid = tuple(self.centroid)
+        except TypeError as error:
+            raise ValueError("centroid must be an iterable numeric vector") from error
+        object.__setattr__(self, "centroid", frozen_centroid)
+
 
 @dataclass(frozen=True, slots=True)
 class PatternDiscoveryState:
@@ -47,6 +55,15 @@ class PatternDiscoveryState:
 
     prototypes: tuple[PatternPrototype, ...] = ()
     next_id: int = 0
+
+    def __post_init__(self) -> None:
+        try:
+            frozen_prototypes = tuple(self.prototypes)
+        except TypeError as error:
+            raise ValueError("prototypes must be an iterable of PatternPrototype values") from error
+        if any(not isinstance(item, PatternPrototype) for item in frozen_prototypes):
+            raise ValueError("prototypes must contain only PatternPrototype values")
+        object.__setattr__(self, "prototypes", frozen_prototypes)
 
 
 @dataclass(frozen=True, slots=True)

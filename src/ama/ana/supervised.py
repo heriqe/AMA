@@ -30,6 +30,16 @@ class LinearReadoutParameters:
     max_abs_parameter: float = 1_000_000.0
 
     def __post_init__(self) -> None:
+        # frozen=True is shallow: snapshot nested inputs so caller-owned lists
+        # cannot mutate model parameters after construction.
+        try:
+            frozen_weights = tuple(tuple(row) for row in self.weights)
+            frozen_bias = tuple(self.bias)
+        except TypeError as error:
+            raise ValueError("weights and bias must be iterable numeric sequences") from error
+        object.__setattr__(self, "weights", frozen_weights)
+        object.__setattr__(self, "bias", frozen_bias)
+
         limit = _finite(self.max_abs_parameter, "max_abs_parameter")
         if limit <= 0.0:
             raise ValueError("max_abs_parameter must be positive")

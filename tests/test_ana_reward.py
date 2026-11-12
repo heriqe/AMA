@@ -60,6 +60,17 @@ def test_reward_invalid_action_reward_and_dimensions_are_rejected():
 
 
 
+def test_reward_state_snapshots_mutable_constructor_inputs():
+    weights = [[0.0]]
+    eligibility = [[0.0]]
+    state = RewardLearningState(weights=weights, eligibility=eligibility)
+
+    weights[0][0] = 99.0
+    eligibility[0][0] = 99.0
+    assert state.weights == ((0.0,),)
+    assert state.eligibility == ((0.0,),)
+
+
 def test_reward_learning_improves_over_initially_preferred_bad_action():
     p = params(learning_rate=0.1, baseline_rate=0.1, eligibility_decay=0.5)
     state = RewardLearningState(

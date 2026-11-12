@@ -59,6 +59,17 @@ def test_pattern_dimensions_and_invalid_capacity_are_rejected():
 
 
 
+def test_pattern_state_snapshots_mutable_prototype_inputs():
+    centroid = [1.0]
+    prototypes = [PatternPrototype(prototype_id=0, centroid=centroid, count=1)]
+    state = PatternDiscoveryState(prototypes=prototypes, next_id=1)
+
+    centroid[0] = 99.0
+    prototypes.clear()
+    assert state.prototypes[0].centroid == (1.0,)
+    assert len(state.prototypes) == 1
+
+
 def test_pattern_discovery_separates_two_synthetic_groups_against_one_centroid():
     p = params(squared_distance_threshold=0.3)
     labels = ("A", "A", "B", "B")

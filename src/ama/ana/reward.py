@@ -60,6 +60,15 @@ class RewardLearningState:
         return cls(weights=zeros, eligibility=zeros, baseline=0.0)
 
     def __post_init__(self) -> None:
+        # Snapshot nested matrices; a frozen dataclass alone is not deeply immutable.
+        try:
+            frozen_weights = tuple(tuple(row) for row in self.weights)
+            frozen_eligibility = tuple(tuple(row) for row in self.eligibility)
+        except TypeError as error:
+            raise ValueError("weights and eligibility must be iterable numeric matrices") from error
+        object.__setattr__(self, "weights", frozen_weights)
+        object.__setattr__(self, "eligibility", frozen_eligibility)
+
         if not _finite_number(self.baseline):
             raise ValueError("baseline must be finite")
         if not self.weights or len(self.weights) != len(self.eligibility):

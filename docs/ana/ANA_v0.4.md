@@ -172,7 +172,7 @@ O resultado informa o ID associado, a distância e se um protótipo foi criado. 
 
 ## 7. Arquitetura de software proposta
 
-Manter três módulos independentes, com dataclasses imutáveis para parâmetros, estado e resultado. As funções de atualização recebem explicitamente estado, observação/feedback e parâmetros e retornam novo estado. Não adicionar dependência NumPy nesta versão inicial.
+Manter três módulos independentes, com dataclasses imutáveis para parâmetros, estado e resultado. Campos compostos recebidos pelos construtores devem ser copiados e normalizados para tuplas (incluindo matrizes e centroides), para que sequências mutáveis fornecidas pelo chamador não alterem objetos já criados. As funções de atualização recebem explicitamente estado, observação/feedback e parâmetros e retornam novo estado. Não adicionar dependência NumPy nesta versão inicial.
 
 A API pública deve usar nomes distintos para evitar confundir inferência, seleção de ação, treinamento supervisionado e atualização por recompensa. A implementação deve manter os três métodos isolados e não acoplar aprendizado ao `step_network`.
 

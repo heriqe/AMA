@@ -182,6 +182,12 @@ def test_parameter_bounds_and_types_are_validated():
         params(learning_rate=10**400)
 
 
+def test_step_rejects_initial_weight_outside_configured_bound():
+    state = PlasticityState.initial((("a", "b"),), (1.1,))
+    with pytest.raises(ValueError, match="connection weight exceeds"):
+        step_plasticity(state, {"a": 0.0, "b": 0.0}, params())
+
+
 def test_weight_update_overflow_is_rejected():
     state = PlasticityState.initial((("a", "b"),), (0.1,))
     p = params(learning_rate=1e308, max_abs_activity=1e154)

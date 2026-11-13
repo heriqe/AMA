@@ -74,4 +74,4 @@ O roadmap é incremental. Datas são referências, não promessas de entrega.
 
 ## Critérios para avançar
 
-Nenhuma fase é considerada concluída apenas porque os arquivos existem. Exigir testes automatizados, documentação atualizada, limites conhecidos, revisão e evidência reproduzível de funcionamento. A v0.4 permanece proposta até a aprovação humana e integração; o sucesso de CI e a revisão automatizada não autorizam merge.
+Nenhuma fase é considerada concluída apenas porque os arquivos existem. Exigir testes automatizados, documentação atualizada, limites conhecidos, revisão e evidência reproduzível de funcionamento. A v0.5 permanece proposta até a aprovação humana e integração; o sucesso de CI e a revisão automatizada não autorizam merge.

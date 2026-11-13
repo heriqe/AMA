@@ -74,10 +74,10 @@ pytest
 | ANA v0.1 — unidade neural isolada | Integrada |
 | ANA v0.2 — grafo recorrente e propagação síncrona | Integrada |
 | ANA v0.3 — memória temporal multiescala | Integrada |
-| ANA v0.5 — plasticidade e conexões dinâmicas controladas | Em desenvolvimento na branch `openhands/ana-development`; não integrada |
 | ANA v0.4 — readout supervisionado, recompensa e protótipos | Integrada à `main` pelo PR #27 |
+| ANA v0.5 — plasticidade e conexões dinâmicas controladas | Em desenvolvimento na branch `openhands/ana-development`; não integrada |
 | Linguagem natural livre | Não implementada |
-| Aprendizado neural integrado à rede recorrente | Não implementado; v0.4 contém mecanismos isolados em revisão |
+| Aprendizado neural integrado à rede recorrente | Não implementado; os mecanismos experimentais v0.4 e v0.5 permanecem separados da propagação recorrente |
 | Organização empresarial e agentes | Futuro |
 | Operação de negócios e integrações | Futuro, sujeita à governança |
 

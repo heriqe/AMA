@@ -4,7 +4,7 @@ O **AMA** é um projeto experimental para construir uma plataforma própria de i
 
 A meta é desenvolver, em etapas verificáveis, um núcleo cognitivo independente de serviços externos de IA e, em uma linha de pesquisa separada, a **ANA (AMA Neural Architecture)**. A integração entre os dois só ocorrerá quando houver componentes testados e interfaces definidas.
 
-> **Estado atual:** Foundation v0.1, Cognitive Core v0.2 e ANA v0.1–v0.3 estão integrados à `main`. A ANA v0.4 está proposta na [PR #27](https://github.com/heriqe/AMA/pull/27), com mecanismos experimentais isolados, testes e documentação; permanece aguardando revisão e aprovação humana, sem integração. O Cognitive Core v0.3 (decisão multicritério) ainda não está implementado. O AMA ainda não é um sistema autônomo de geração de renda e não deve ser usado para movimentar dinheiro, publicar conteúdo ou assumir compromissos externos.
+> **Estado atual:** Foundation v0.1, Cognitive Core v0.2 e ANA v0.1–v0.4 estão integrados à `main`; a ANA v0.4 foi integrada pelo PR #27 em 2026-11-12. A ANA v0.5 está em desenvolvimento na branch `openhands/ana-development`, investigando plasticidade limitada de um conjunto explícito de conexões candidatas; ainda não está integrada. O Cognitive Core v0.3 (decisão multicritério) ainda não está implementado. O AMA ainda não é um sistema autônomo de geração de renda e não deve ser usado para movimentar dinheiro, publicar conteúdo ou assumir compromissos externos.
 
 ## Princípios
 
@@ -26,7 +26,7 @@ AMA/
 │   ├── ROADMAP.md
 │   └── ana/            # especificações e arquitetura modular da ANA
 ├── src/ama/
-│   ├── ana/            # unidade v0.1, rede v0.2, memória v0.3 e módulos v0.4 em revisão
+│   ├── ana/            # unidade v0.1, rede v0.2, memória v0.3, aprendizado v0.4 e plasticidade v0.5 em desenvolvimento
 │   ├── core/           # contratos e pipeline cognitivo
 │   ├── knowledge/      # fatos, política de validade/conflito e SQLite
 │   ├── memory/         # registros persistentes
@@ -74,7 +74,8 @@ pytest
 | ANA v0.1 — unidade neural isolada | Integrada |
 | ANA v0.2 — grafo recorrente e propagação síncrona | Integrada |
 | ANA v0.3 — memória temporal multiescala | Integrada |
-| ANA v0.4 — readout supervisionado, recompensa e protótipos | Em revisão na PR #27; não integrada |
+| ANA v0.5 — plasticidade e conexões dinâmicas controladas | Em desenvolvimento na branch `openhands/ana-development`; não integrada |
+| ANA v0.4 — readout supervisionado, recompensa e protótipos | Integrada à `main` pelo PR #27 |
 | Linguagem natural livre | Não implementada |
 | Aprendizado neural integrado à rede recorrente | Não implementado; v0.4 contém mecanismos isolados em revisão |
 | Organização empresarial e agentes | Futuro |
@@ -82,6 +83,6 @@ pytest
 
 ## Limites atuais
 
-O Cognitive Core manipula observações estruturadas e regras determinísticas; não interpreta linguagem natural livre. Seu planejador atual ordena tarefas por dependências e as regras de orçamento funcionam como condições de autorização, não como decisão multicritério entre alternativas. Na `main`, a ANA v0.1 implementa uma unidade isolada, a v0.2 propaga sinais em uma rede recorrente com topologia e pesos fixos, e a v0.3 mantém traços temporais multiescala. A PR #27 propõe readout supervisionado, atualização por recompensa e descoberta incremental de protótipos, mas esses mecanismos ainda são experimentais, não estão integrados à rede recorrente e aguardam revisão/aprovação. Nenhuma dessas versões executa negócios ou ações externas, nem demonstra inteligência geral.
+O Cognitive Core manipula observações estruturadas e regras determinísticas; não interpreta linguagem natural livre. Seu planejador atual ordena tarefas por dependências e as regras de orçamento funcionam como condições de autorização, não como decisão multicritério entre alternativas. Na `main`, a ANA v0.1 implementa uma unidade isolada, a v0.2 propaga sinais em uma rede recorrente com topologia e pesos fixos, e a v0.3 mantém traços temporais multiescala. A ANA v0.4 integra mecanismos experimentais isolados de readout supervisionado, atualização por recompensa e descoberta incremental de protótipos; eles não atualizam automaticamente a rede recorrente. A v0.5 investiga plasticidade de conexões candidatas com pesos limitados, ativação e poda por persistência, sem alterar a definição da rede por efeitos colaterais. Limites por conexão não constituem prova de estabilidade global. Nenhuma dessas versões executa negócios ou ações externas, nem demonstra inteligência geral.
 
 Consulte [docs/ROADMAP.md](docs/ROADMAP.md) para a sequência de desenvolvimento.

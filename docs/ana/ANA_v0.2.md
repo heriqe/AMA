@@ -3,7 +3,7 @@
 **Projeto:** AMA — Autonomous Money AI  
 **Linha:** ANA — AMA Neural Architecture  
 **Versão:** 0.2  
-**Estado:** especificação e protótipo experimental em revisão
+**Estado:** especificação e protótipo experimental integrados à `main`
 
 ## 1. Objetivo
 

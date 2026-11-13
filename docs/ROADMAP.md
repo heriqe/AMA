@@ -1,6 +1,6 @@
 # Roadmap do AMA
 
-**Roadmap atualizado — 2026-11-12**
+**Roadmap atualizado — 2026-11-13**
 
 O roadmap é incremental. Datas são referências, não promessas de entrega.
 
@@ -40,19 +40,26 @@ O roadmap é incremental. Datas são referências, não promessas de entrega.
 - [x] ANA v0.2: grafo dirigido recorrente, conexões ponderadas e propagação síncrona, integrados à `main`.
 - [x] ANA v0.3: memória temporal multiescala e contexto, integrados à `main` pelo PR #26.
 
-### ANA v0.4 — em revisão na PR #27
+### ANA v0.4 — integrada à `main` pelo PR #27
 
 - [x] Especificação matemática dos mecanismos supervisionado, por recompensa e descoberta incremental.
 - [x] Implementação isolada dos três mecanismos, sem acoplamento automático à rede recorrente ou à memória.
-- [x] Testes unitários determinísticos, incluindo baselines sintéticos e limites numéricos.
-- [x] GitHub Actions #218: suíte completa aprovada no head `39719d810b8242b5e665d7f9312d9f17d9bf22c7`.
-- [ ] Revisão automatizada atualizada para o head atual: a revisão Codex registrada examinou um commit anterior (`03120b8582`); não equivale à revisão do head atual.
-- [ ] Revisão humana, aprovação explícita e integração à `main`.
+- [x] Testes unitários determinísticos, incluindo baselines sintéticos, imutabilidade profunda e limites numéricos.
+- [x] GitHub Actions #225: job `pytest` e etapa `Run tests` aprovados no head `db602220624cd26e5a7052c5da08598d0e581cb3`.
+- [x] Revisão Codex do head `db60222062` concluída sem apontar problemas importantes.
+- [x] Integração humana pelo PR #27 em 2026-11-12; merge commit `34432022541ed859da63231c83609c63e7f531e9`.
+
+### ANA v0.5 — em desenvolvimento na branch `openhands/ana-development`
+
+- [x] Especificação técnica e critérios de aceitação para plasticidade limitada de conexões candidatas.
+- [ ] Implementação do estado imutável e da transição de plasticidade.
+- [ ] Testes de pesos limitados, ativação, poda, determinismo, entradas inválidas e estabilidade local.
+- [ ] Benchmark sintético contra topologia fixa e adaptação apenas de peso.
+- [ ] Revisão automatizada, aprovação humana e integração à `main`.
 
 ### Próximas versões
 
-- [ ] ANA v0.5: plasticidade/conexões dinâmicas, sob limites e testes de estabilidade. Bloqueada até a v0.4 ser aprovada e integrada.
-- [ ] ANA v0.6–v0.8: etapas posteriores, a especificar e validar sequencialmente, sem antecipar implementação.
+- [ ] ANA v0.6–v0.8: etapas posteriores, a especificar e validar sequencialmente; v0.6 permanece bloqueada até a v0.5 ser revisada, aprovada e integrada.
 - [ ] ANA 1.0: interface experimental para integração com o Cognitive Core, após validação das etapas anteriores.
 
 ## Plataforma AMA

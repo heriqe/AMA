@@ -3,7 +3,7 @@
 **Projeto:** AMA — Autonomous Money AI  
 **Linha:** ANA — AMA Neural Architecture  
 **Versão:** 0.4  
-**Estado:** implementação experimental preparada na PR #27; aguardando revisão e aprovação humana, ainda não integrada à `main`  
+**Estado:** implementação experimental integrada à `main` pelo PR #27 em 2026-11-12  
 **Compatibilidade:** Python 3.11+, biblioteca padrão, sem serviço externo ou GPU
 
 ## 1. Objetivo
@@ -204,3 +204,11 @@ Registro em 2026-11-11:
 - A revisão automatizada Codex desse mesmo commit foi concluída sem findings; isso não equivale à aprovação humana.
 - A PR #27 continua aberta, não integrada, e aguarda aprovação humana. Alterações posteriores de documentação/testes exigem nova validação do head atualizado.
 - Os mecanismos permanecem isolados: não atualizam automaticamente os pesos da rede v0.2 ou os traços de memória v0.3, não executam ações e não demonstram inteligência geral.
+
+## 12. Integração e validação final
+
+- O PR #27 foi integrado por ação humana de `heriqe` em 2026-11-12 às 23:41:48 UTC.
+- Merge commit: `34432022541ed859da63231c83609c63e7f531e9`.
+- GitHub Actions #225: job `pytest` e etapa `Run tests` concluídos com sucesso no head `db602220624cd26e5a7052c5da08598d0e581cb3`.
+- Revisão automatizada Codex do head `db60222062`: concluída sem apontar problemas importantes.
+- Os mecanismos continuam isolados e não atualizam automaticamente a rede recorrente v0.2 ou a memória temporal v0.3.

@@ -3,7 +3,7 @@
 **Projeto:** AMA — Autonomous Money AI  
 **Linha:** ANA — AMA Neural Architecture  
 **Versão:** 0.5  
-**Estado:** especificação técnica preparada; implementação em desenvolvimento na branch `openhands/ana-development`  
+**Estado:** implementação experimental preparada na branch `openhands/ana-development`; revisão e integração pendentes  
 **Compatibilidade:** Python 3.11+, biblioteca padrão, sem GPU ou serviço externo
 
 ## 1. Objetivo

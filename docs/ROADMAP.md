@@ -52,9 +52,10 @@ O roadmap é incremental. Datas são referências, não promessas de entrega.
 ### ANA v0.5 — em desenvolvimento na branch `openhands/ana-development`
 
 - [x] Especificação técnica e critérios de aceitação para plasticidade limitada de conexões candidatas.
-- [ ] Implementação do estado imutável e da transição de plasticidade.
-- [ ] Testes de pesos limitados, ativação, poda, determinismo, entradas inválidas e estabilidade local.
-- [ ] Benchmark sintético contra topologia fixa e adaptação apenas de peso.
+- [x] Implementação do estado imutável e da transição de plasticidade em `plasticity.py`.
+- [x] Testes de pesos limitados, ativação, poda, determinismo, entradas inválidas, snapshot profundo e estabilidade local por 5.000 passos.
+- [x] Benchmark sintético contra topologia fixa e adaptação apenas de peso; o baseline apenas de peso teve menor erro no protocolo de referência.
+- [ ] Experimentos adicionais com ruído, múltiplas sementes e rede completa.
 - [ ] Revisão automatizada, aprovação humana e integração à `main`.
 
 ### Próximas versões

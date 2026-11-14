@@ -17,6 +17,9 @@ from ama.ana.plasticity import (
 from ama.ana.benchmark import (
     PlasticityBenchmarkReport,
     PlasticityBenchmarkVariant,
+    PlasticityRobustnessReport,
+    PlasticityRobustnessVariant,
+    run_noisy_plasticity_benchmark,
     run_plasticity_benchmark,
 )
 from ama.ana.patterns import (
@@ -69,6 +72,8 @@ __all__ = [
     "PlasticityBenchmarkVariant",
     "PlasticityParameters",
     "PlasticityState",
+    "PlasticityRobustnessReport",
+    "PlasticityRobustnessVariant",
     "PatternAssignment",
     "PatternDiscoveryParameters",
     "PatternDiscoveryState",
@@ -78,6 +83,7 @@ __all__ = [
     "action_scores",
     "assign_pattern",
     "predict_readout",
+    "run_noisy_plasticity_benchmark",
     "run_plasticity_benchmark",
     "select_action",
     "step_plasticity",

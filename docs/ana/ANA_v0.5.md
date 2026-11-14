@@ -3,7 +3,7 @@
 **Projeto:** AMA — Autonomous Money AI  
 **Linha:** ANA — AMA Neural Architecture  
 **Versão:** 0.5  
-**Estado:** implementação experimental preparada na branch `openhands/ana-development`; revisão e integração pendentes  
+**Estado:** implementação experimental preparada na branch openhands/ana-development; revisão e integração pendentes  
 **Compatibilidade:** Python 3.11+, biblioteca padrão, sem GPU ou serviço externo
 
 ## 1. Objetivo
@@ -28,49 +28,37 @@ Pares ordenados devem ser únicos. Auto-conexões são permitidas porque a API d
 
 ## 3. Atualização de peso
 
-Para uma conexão ativa (i \to j), com atividades finitas (a_i(t)) e (a_j(t)):
+Para uma conexão ativa (i → j), com atividades finitas a_i(t) e a_j(t):
 
-\[
-w_{ij}^{raw}(t+1) = w_{ij}(t) + \eta a_i(t)a_j(t) - \lambda w_{ij}(t)
-\]
+w_raw(t+1) = w(t) + η a_i(t)a_j(t) − λw(t)
 
-\[
-w_{ij}(t+1)=\operatorname{clip}(w_{ij}^{raw}(t+1),-W_{max},W_{max})
-\]
+w(t+1) = clip(w_raw(t+1), −W_max, W_max)
 
 O termo de coativação é Hebbiano; o decaimento reduz persistência sem suporte. O clipping mantém cada peso dentro do limite configurado. Overflow aritmético é rejeitado explicitamente, não convertido silenciosamente em estado inválido.
 
 ## 4. Ativação de candidatas
 
-Uma candidata inativa é considerada coativa quando:
+Uma candidata inativa é considerada coativa quando |a_i(t)| ≥ θ_a e |a_j(t)| ≥ θ_a.
 
-\[
-|a_i(t)| \geq \theta_a \quad \land \quad |a_j(t)| \geq \theta_a
-\]
-
-O contador consecutivo aumenta quando a condição é verdadeira e volta a zero quando falha. Ao atingir (K) passos consecutivos, a conexão é ativada com o peso inicial configurado. O peso inicial é atribuído nesse passo; a atualização Hebbiana começa no passo seguinte.
+O contador consecutivo aumenta quando a condição é verdadeira e volta a zero quando falha. Ao atingir K passos consecutivos, a conexão é ativada com o peso inicial configurado. O peso inicial é atribuído nesse passo; a atualização Hebbiana começa no passo seguinte.
 
 ## 5. Poda de conexões
 
-Depois da atualização de peso, uma conexão ativa cujo peso satisfaça:
+Depois da atualização de peso, uma conexão ativa cujo peso satisfaça |w(t+1)| < θ_p incrementa o contador de fraqueza.
 
-\[
-|w_{ij}(t+1)| < \theta_p
-\]
-
-incrementa o contador de fraqueza. Se o contador atingir (P) passos consecutivos, a conexão é desativada, seu peso é zerado e os contadores são reiniciados. Se o peso deixar de estar abaixo do limiar, o contador de poda volta a zero. Um limiar de poda igual a zero desabilita a poda.
+Se o contador atingir P passos consecutivos, a conexão é desativada, seu peso é zerado e os contadores são reiniciados. Se o peso deixar de estar abaixo do limiar, o contador de poda volta a zero. Um limiar de poda igual a zero desabilita a poda.
 
 ## 6. Parâmetros e limites
 
-- (\eta): taxa de plasticidade finita e positiva.
-- (\lambda): decaimento finito em ([0,1]).
-- (W_{max}): limite absoluto de peso, finito e positivo.
-- (A_{max}): limite absoluto de atividade, finito e positivo.
-- (\theta_a): limiar de ativação em ((0,A_{max}]).
-- (K): número inteiro positivo de passos para ativação.
-- (\theta_p): limiar de poda em ([0,W_{max})).
-- (P): número inteiro positivo de passos para poda.
-- (w_{init}): peso inicial não nulo, finito e dentro de ([-W_{max},W_{max}]).
+- η: taxa de plasticidade finita e positiva.
+- λ: decaimento finito em [0, 1].
+- W_max: limite absoluto de peso, finito e positivo.
+- A_max: limite absoluto de atividade, finito e positivo.
+- θ_a: limiar de ativação em (0, A_max].
+- K: número inteiro positivo de passos para ativação.
+- θ_p: limiar de poda em [0, W_max).
+- P: número inteiro positivo de passos para poda.
+- w_init: peso inicial não nulo, finito e dentro de [-W_max, W_max].
 
 IDs vazios, pares duplicados, atividades ausentes, números não finitos, dimensões/estados inválidos e limites excedidos são rejeitados. Contadores são inteiros não negativos e permanecem abaixo do respectivo limiar enquanto a conexão está no estado correspondente.
 
@@ -78,31 +66,32 @@ IDs vazios, pares duplicados, atividades ausentes, números não finitos, dimens
 
 A transição recebe explicitamente estado, mapa de atividades e parâmetros e retorna um novo estado imutável. Coleções recebidas do chamador são copiadas para tuplas; mutações posteriores nas listas originais não podem alterar snapshots já criados.
 
-`PlasticityState.active_connections()` retorna as conexões ativas em ordem estável, usando o tipo `Connection` da rede v0.2. O chamador deve construir uma nova `NetworkDefinition` explicitamente. A plasticidade não modifica uma rede existente por efeitos colaterais.
+PlasticityState.active_connections() retorna as conexões ativas em ordem estável, usando o tipo Connection da rede v0.2. O chamador deve construir uma nova NetworkDefinition explicitamente. A plasticidade não modifica uma rede existente por efeitos colaterais.
 
 ## 8. Estabilidade e limites científicos
 
-O limite absoluto garante apenas que os pesos individuais produzidos por este mecanismo permanecem limitados. Isso não prova estabilidade das ativações, convergência, ausência de oscilações, robustez a ruído ou benefício cognitivo. Esses pontos exigem experimentos separados na rede completa.
+O limite absoluto garante apenas que os pesos individuais produzidos por este mecanismo permanecem limitados. Isso não prova estabilidade das ativações, convergência, ausência de oscilações, robustez geral a ruído ou benefício cognitivo. O experimento ruidoso em cinco sementes documenta apenas o protocolo específico descrito em ANA_v0.5_experiments.md; a avaliação em rede completa continua necessária.
 
 ## 9. Critérios de aceitação
 
 1. Pesos ativos seguem a regra Hebbiana com decaimento e clipping.
 2. Pesos nunca excedem o limite absoluto configurado.
-3. Candidatas ativam somente após (K) passos consecutivos de coativação.
+3. Candidatas ativam somente após K passos consecutivos de coativação.
 4. Uma quebra de coativação reinicia o contador.
-5. Conexões fracas são podadas somente após (P) passos consecutivos.
+5. Conexões fracas são podadas somente após P passos consecutivos.
 6. O estado anterior permanece imutável, inclusive para entradas originalmente mutáveis.
 7. Mesmas entradas, estado e parâmetros produzem resultados idênticos.
 8. IDs, candidatos, contadores, atividades e parâmetros inválidos são rejeitados.
 9. Conexões ativas podem ser convertidas para a API de rede v0.2.
 10. Testes de estresse confirmam limites locais e ausência de valores não finitos ao longo de muitas transições.
+11. O benchmark ruidoso usa fluxos compartilhados por variante, sementes explícitas e limites de carga para manter o experimento reproduzível e finito.
 
 ## 10. Plano de implementação
 
 - Unidade 1: parâmetros, candidatos, estado imutável e transição pura.
-- Unidade 2: integração explícita por `active_connections()` e testes de compatibilidade com `NetworkDefinition`.
+- Unidade 2: integração explícita por active_connections() e testes de compatibilidade com NetworkDefinition.
 - Unidade 3: benchmark sintético contra topologia fixa e plasticidade apenas de peso.
-- Unidade 4: experimentos adicionais com ruído, múltiplas sementes e mudanças de regime, sem antecipar a v0.6.
+- Unidade 4: benchmark com ruído uniforme limitado e múltiplas sementes, executado e documentado; avaliação em rede completa permanece pendente.
 
 ## 11. Não objetivos
 

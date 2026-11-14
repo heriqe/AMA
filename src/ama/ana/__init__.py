@@ -8,6 +8,20 @@ from ama.ana.network import (
     NodeState,
     step_network,
 )
+from ama.ana.plasticity import (
+    PlasticConnection,
+    PlasticityParameters,
+    PlasticityState,
+    step_plasticity,
+)
+from ama.ana.benchmark import (
+    PlasticityBenchmarkReport,
+    PlasticityBenchmarkVariant,
+    PlasticityRobustnessReport,
+    PlasticityRobustnessVariant,
+    run_noisy_plasticity_benchmark,
+    run_plasticity_benchmark,
+)
 from ama.ana.patterns import (
     PatternAssignment,
     PatternDiscoveryParameters,
@@ -53,6 +67,13 @@ __all__ = [
     "NeuralUnitInput",
     "NeuralUnitParameters",
     "NeuralUnitState",
+    "PlasticConnection",
+    "PlasticityBenchmarkReport",
+    "PlasticityBenchmarkVariant",
+    "PlasticityParameters",
+    "PlasticityState",
+    "PlasticityRobustnessReport",
+    "PlasticityRobustnessVariant",
     "PatternAssignment",
     "PatternDiscoveryParameters",
     "PatternDiscoveryState",
@@ -62,7 +83,10 @@ __all__ = [
     "action_scores",
     "assign_pattern",
     "predict_readout",
+    "run_noisy_plasticity_benchmark",
+    "run_plasticity_benchmark",
     "select_action",
+    "step_plasticity",
     "step",
     "step_multiscale_memory",
     "step_network",

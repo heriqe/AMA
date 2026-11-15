@@ -5,11 +5,34 @@ from __future__ import annotations
 import math
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
+from itertools import islice
+from typing import TypeVar
 
 from ama.ana.network import Connection
 
 
 MAX_PLASTICITY_CANDIDATES = 100_000
+
+
+T = TypeVar("T")
+
+
+def _bounded_tuple(
+    values: Iterable[T],
+    limit: int,
+    *,
+    iterable_message: str,
+    overflow_message: str,
+) -> tuple[T, ...]:
+    """Materialize at most limit + 1 items before rejecting oversized iterables."""
+    try:
+        iterator = iter(values)
+    except TypeError as error:
+        raise ValueError(iterable_message) from error
+    items = tuple(islice(iterator, limit + 1))
+    if len(items) > limit:
+        raise ValueError(overflow_message)
+    return items
 
 
 def _finite_float(value: object, name: str) -> float:
@@ -116,12 +139,12 @@ class PlasticityState:
     connections: tuple[PlasticConnection, ...]
 
     def __post_init__(self) -> None:
-        try:
-            frozen = tuple(self.connections)
-        except TypeError as error:
-            raise ValueError("connections must be an iterable of PlasticConnection values") from error
-        if len(frozen) > MAX_PLASTICITY_CANDIDATES:
-            raise ValueError(f"candidate pool exceeds {MAX_PLASTICITY_CANDIDATES} connections")
+        frozen = _bounded_tuple(
+            self.connections,
+            MAX_PLASTICITY_CANDIDATES,
+            iterable_message="connections must be an iterable of PlasticConnection values",
+            overflow_message=f"candidate pool exceeds {MAX_PLASTICITY_CANDIDATES} connections",
+        )
         if any(not isinstance(item, PlasticConnection) for item in frozen):
             raise ValueError("connections must contain only PlasticConnection values")
         pairs = [(item.source, item.target) for item in frozen]
@@ -135,12 +158,12 @@ class PlasticityState:
         candidate_pairs: Iterable[tuple[str, str]],
         initial_weights: Iterable[float] | None = None,
     ) -> "PlasticityState":
-        try:
-            pairs = tuple(candidate_pairs)
-        except TypeError as error:
-            raise ValueError("candidate_pairs must be iterable") from error
-        if len(pairs) > MAX_PLASTICITY_CANDIDATES:
-            raise ValueError(f"candidate pool exceeds {MAX_PLASTICITY_CANDIDATES} connections")
+        pairs = _bounded_tuple(
+            candidate_pairs,
+            MAX_PLASTICITY_CANDIDATES,
+            iterable_message="candidate_pairs must be iterable",
+            overflow_message=f"candidate pool exceeds {MAX_PLASTICITY_CANDIDATES} connections",
+        )
 
         checked_pairs: list[tuple[str, str]] = []
         for pair in pairs:
@@ -158,10 +181,12 @@ class PlasticityState:
         if initial_weights is None:
             weights = (0.0,) * len(checked_pairs)
         else:
-            try:
-                raw_weights = tuple(initial_weights)
-            except TypeError as error:
-                raise ValueError("initial_weights must be iterable") from error
+            raw_weights = _bounded_tuple(
+                initial_weights,
+                len(checked_pairs),
+                iterable_message="initial_weights must be iterable",
+                overflow_message="initial_weights must match candidate_pairs",
+            )
             if len(raw_weights) != len(checked_pairs):
                 raise ValueError("initial_weights must match candidate_pairs")
             weights = tuple(_finite_float(value, "initial weight") for value in raw_weights)

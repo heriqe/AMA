@@ -5,6 +5,7 @@ from __future__ import annotations
 import math
 import random
 from collections.abc import Iterable
+from itertools import islice
 from dataclasses import dataclass
 
 from ama.ana.plasticity import (
@@ -213,7 +214,7 @@ def run_noisy_plasticity_benchmark(
         raise ValueError("noise_amplitude must be finite and in [0, 1]")
 
     try:
-        seed_values = tuple(seeds)
+        seed_values = tuple(islice(iter(seeds), 101))
     except TypeError as error:
         raise ValueError("seeds must be an iterable of non-negative integers") from error
     if not 1 <= len(seed_values) <= 100:

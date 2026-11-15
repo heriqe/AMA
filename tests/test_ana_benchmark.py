@@ -83,6 +83,21 @@ def test_invalid_seed_collections_are_rejected(seeds):
         run_noisy_plasticity_benchmark(seeds=seeds)
 
 
+def test_noisy_benchmark_bounds_unbounded_seed_generator_consumption():
+    consumed = []
+
+    def seeds():
+        index = 0
+        while True:
+            consumed.append(index)
+            yield index
+            index += 1
+
+    with pytest.raises(ValueError, match="between 1 and 100"):
+        run_noisy_plasticity_benchmark(seeds=seeds())
+    assert len(consumed) == 101
+
+
 def test_robustness_benchmark_rejects_excessive_workload():
     with pytest.raises(ValueError, match="100000"):
         run_noisy_plasticity_benchmark(steps_per_phase=10_000, seeds=range(3))

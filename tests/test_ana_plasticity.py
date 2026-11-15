@@ -2,6 +2,7 @@ import math
 
 import pytest
 
+import ama.ana.plasticity as plasticity_module
 from ama.ana.network import Connection
 from ama.ana.plasticity import (
     PlasticConnection,
@@ -193,6 +194,53 @@ def test_weight_update_overflow_is_rejected():
     p = params(learning_rate=1e308, max_abs_activity=1e154)
     with pytest.raises(ValueError, match="weight update overflowed"):
         step_plasticity(state, {"a": 1e154, "b": 1e154}, p)
+
+
+def test_candidate_pair_limit_stops_unbounded_generator(monkeypatch):
+    monkeypatch.setattr(plasticity_module, "MAX_PLASTICITY_CANDIDATES", 2)
+    consumed = []
+
+    def candidate_pairs():
+        index = 0
+        while True:
+            consumed.append(index)
+            yield (f"source-{index}", f"target-{index}")
+            index += 1
+
+    with pytest.raises(ValueError, match="candidate pool exceeds 2"):
+        PlasticityState.initial(candidate_pairs())
+    assert len(consumed) == 3
+
+
+def test_direct_state_constructor_bounds_generator_consumption(monkeypatch):
+    monkeypatch.setattr(plasticity_module, "MAX_PLASTICITY_CANDIDATES", 2)
+    consumed = []
+
+    def connections():
+        index = 0
+        while True:
+            consumed.append(index)
+            yield PlasticConnection(f"source-{index}", f"target-{index}", 0.1, True)
+            index += 1
+
+    with pytest.raises(ValueError, match="candidate pool exceeds 2"):
+        PlasticityState(connections())
+    assert len(consumed) == 3
+
+
+def test_initial_weights_bound_generator_to_candidate_count_plus_one():
+    consumed = []
+
+    def weights():
+        index = 0
+        while True:
+            consumed.append(index)
+            yield 0.1
+            index += 1
+
+    with pytest.raises(ValueError, match="initial_weights must match"):
+        PlasticityState.initial((("a", "b"), ("b", "c")), weights())
+    assert len(consumed) == 3
 
 
 def test_long_run_keeps_each_weight_finite_and_bounded():

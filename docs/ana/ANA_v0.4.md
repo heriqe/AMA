@@ -193,11 +193,11 @@ A v0.4 não implementa backpropagation através da rede recorrente, ajuste autom
 
 ## 10. Próxima etapa
 
-A implementação dos três mecanismos e seus testes está preparada na PR #27. A v0.4 só poderá ser considerada concluída após revisão do head atualizado, aprovação humana explícita e integração à `main`. A v0.5 permanece bloqueada até esse momento.
+A ANA v0.4 foi integrada à `main` pelo PR #27 em 2026-11-12. A v0.5 está em desenvolvimento experimental na branch `openhands/ana-development`, proposta na PR #28 e sujeita a revisão automatizada e humana. A v0.6 permanece bloqueada até que a v0.5 seja revisada, aprovada explicitamente e integrada à `main`.
 
 ## 11. Estado de implementação e validação
 
-Registro em 2026-11-11:
+Snapshot histórico — 2026-11-11 (superado pela integração registrada na seção 12):
 
 - A PR #27 contém `supervised.py`, `reward.py` e `patterns.py`, seus exports e testes específicos.
 - A GitHub Actions #217 concluiu com sucesso a suíte completa no commit de código `e4d243c71621fa7664c8681aa23ddf5810f17776`.

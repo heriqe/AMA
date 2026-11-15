@@ -22,7 +22,7 @@ Cada candidato dirigido contém:
 - contador de passos consecutivos de coativação;
 - contador de passos consecutivos abaixo do limiar de poda.
 
-O conjunto de pares é definido pelo chamador na inicialização e permanece fixo durante a execução. A v0.5 não cria unidades nem inventa novos pares. O limite inicial é de 100.000 candidatos, compatível com o limite de conexões da rede v0.2.
+O conjunto de pares é definido pelo chamador na inicialização e permanece fixo durante a execução. A v0.5 não cria unidades nem inventa novos pares. O limite inicial é de 100.000 candidatos, compatível com o limite de conexões da rede v0.2. O limite é aplicado durante o consumo do iterável: no máximo 100.001 itens são lidos para detectar excesso, evitando materializar integralmente um gerador ilimitado. O construtor direto do estado segue a mesma regra; os pesos iniciais são limitados à quantidade de candidatos mais um item.
 
 Pares ordenados devem ser únicos. Auto-conexões são permitidas porque a API de rede v0.2 não as proíbe; a plasticidade não deve restringir uma topologia já válida.
 
@@ -72,7 +72,7 @@ incrementa o contador de fraqueza. Se o contador atingir (P) passos consecutivos
 - (P): número inteiro positivo de passos para poda.
 - (w_{init}): peso inicial não nulo, finito e dentro de ([-W_{max},W_{max}]).
 
-IDs vazios, pares duplicados, atividades ausentes, números não finitos, dimensões/estados inválidos e limites excedidos são rejeitados. Contadores são inteiros não negativos e permanecem abaixo do respectivo limiar enquanto a conexão está no estado correspondente.
+IDs vazios, pares duplicados, atividades ausentes, números não finitos, dimensões/estados inválidos e limites excedidos são rejeitados. Contadores são inteiros não negativos e permanecem abaixo do respectivo limiar enquanto a conexão está no estado correspondente. A validação de iteráveis deve interromper o consumo assim que o primeiro item além do limite for observado; o benchmark ruidoso aceita de 1 a 100 sementes e consome no máximo 101 para detectar excesso.
 
 ## 7. Estado e interface
 
@@ -97,6 +97,7 @@ O limite absoluto garante apenas que os pesos individuais produzidos por este me
 9. Conexões ativas podem ser convertidas para a API de rede v0.2.
 10. Testes de estresse confirmam limites locais e ausência de valores não finitos ao longo de muitas transições.
 11. O benchmark ruidoso usa fluxos compartilhados por variante, sementes explícitas e limites de carga para manter o experimento reproduzível e finito.
+12. Iteráveis de candidatos, estados, pesos iniciais e sementes são limitados durante o consumo, sem materialização ilimitada antes da validação.
 
 ## 10. Plano de implementação
 

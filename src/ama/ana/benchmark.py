@@ -5,8 +5,8 @@ from __future__ import annotations
 import math
 import random
 from collections.abc import Iterable
-from itertools import islice
 from dataclasses import dataclass
+from itertools import islice
 
 from ama.ana.plasticity import (
     PlasticityParameters,

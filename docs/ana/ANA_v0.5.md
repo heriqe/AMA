@@ -97,7 +97,7 @@ O limite absoluto garante apenas que os pesos individuais produzidos por este me
 9. Conexões ativas podem ser convertidas para a API de rede v0.2.
 10. Testes de estresse confirmam limites locais e ausência de valores não finitos ao longo de muitas transições.
 11. O benchmark ruidoso usa fluxos compartilhados por variante, sementes explícitas e limites de carga para manter o experimento reproduzível e finito.
-12. Iteráveis de candidatos, estados, pesos iniciais e sementes são limitados durante o consumo, sem materialização ilimitada antes da validação.
+12. Iteráveis de pares candidatos, coleções de conexões do estado, pesos iniciais e sementes são limitados durante o consumo, sem materialização ilimitada antes da validação.
 
 ## 10. Plano de implementação
 

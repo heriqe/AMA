@@ -1,6 +1,6 @@
 # Roadmap do AMA
 
-**Roadmap atualizado — 2026-11-14**
+**Roadmap atualizado — 2026-11-21**
 
 O roadmap é incremental. Datas são referências, não promessas de entrega.
 
@@ -57,7 +57,9 @@ O roadmap é incremental. Datas são referências, não promessas de entrega.
 - [x] Benchmark sintético contra topologia fixa e adaptação apenas de peso; o baseline apenas de peso teve menor erro no protocolo de referência.
 - [x] Experimento adicional com ruído uniforme limitado e cinco sementes; o baseline apenas de peso também teve menor erro médio no protocolo testado.
 - [ ] Avaliação em rede completa, com mudanças graduais de regime, ruído variado e mais sementes.
-- [ ] Revisão automatizada do novo head, aprovação humana e integração à main.
+- [x] CI #232: 143 testes aprovados no head 59d7678b (Python 3.11.18; 0,43 s).
+- [x] Revisão automatizada Codex do head 59d7678b concluída sem findings em 2026-11-15.
+- [ ] Aprovação humana e integração à main.
 
 ### Próximas versões
 

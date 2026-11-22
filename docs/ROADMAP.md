@@ -1,6 +1,6 @@
 # Roadmap do AMA
 
-**Roadmap atualizado — 2026-11-21**
+**Roadmap atualizado — 2026-11-22**
 
 O roadmap é incremental. Datas são referências, não promessas de entrega.
 
@@ -59,6 +59,8 @@ O roadmap é incremental. Datas são referências, não promessas de entrega.
 - [ ] Avaliação em rede completa, com mudanças graduais de regime, ruído variado e mais sementes.
 - [x] CI #232: 143 testes aprovados no head 59d7678b (Python 3.11.18; 0,43 s).
 - [x] Revisão automatizada Codex do head 59d7678b concluída sem findings em 2026-11-15.
+- [x] CI #233: 143 testes aprovados no head 135451b9 (Python 3.11.18; 0,45 s).
+- [x] Revisão automatizada Codex do head 135451b9 concluída sem findings em 2026-11-21.
 - [ ] Aprovação humana e integração à main.
 
 ### Próximas versões

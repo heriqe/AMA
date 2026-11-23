@@ -3,7 +3,7 @@
 **Projeto:** AMA — Autonomous Money AI  
 **Linha:** ANA — AMA Neural Architecture  
 **Versão:** 0.4  
-**Estado:** implementação experimental preparada na PR #27; aguardando revisão e aprovação humana, ainda não integrada à `main`  
+**Estado:** implementação experimental integrada à `main` pelo PR #27 em 2026-11-12  
 **Compatibilidade:** Python 3.11+, biblioteca padrão, sem serviço externo ou GPU
 
 ## 1. Objetivo
@@ -193,14 +193,22 @@ A v0.4 não implementa backpropagation através da rede recorrente, ajuste autom
 
 ## 10. Próxima etapa
 
-A implementação dos três mecanismos e seus testes está preparada na PR #27. A v0.4 só poderá ser considerada concluída após revisão do head atualizado, aprovação humana explícita e integração à `main`. A v0.5 permanece bloqueada até esse momento.
+A ANA v0.4 foi integrada à `main` pelo PR #27 em 2026-11-12. A v0.5 está em desenvolvimento experimental na branch `openhands/ana-development`, proposta na PR #28 e sujeita a revisão automatizada e humana. A v0.6 permanece bloqueada até que a v0.5 seja revisada, aprovada explicitamente e integrada à `main`.
 
 ## 11. Estado de implementação e validação
 
-Registro em 2026-11-11:
+Snapshot histórico — 2026-11-11 (superado pela integração registrada na seção 12):
 
 - A PR #27 contém `supervised.py`, `reward.py` e `patterns.py`, seus exports e testes específicos.
 - A GitHub Actions #217 concluiu com sucesso a suíte completa no commit de código `e4d243c71621fa7664c8681aa23ddf5810f17776`.
 - A revisão automatizada Codex desse mesmo commit foi concluída sem findings; isso não equivale à aprovação humana.
 - A PR #27 continua aberta, não integrada, e aguarda aprovação humana. Alterações posteriores de documentação/testes exigem nova validação do head atualizado.
 - Os mecanismos permanecem isolados: não atualizam automaticamente os pesos da rede v0.2 ou os traços de memória v0.3, não executam ações e não demonstram inteligência geral.
+
+## 12. Integração e validação final
+
+- O PR #27 foi integrado por ação humana de `heriqe` em 2026-11-12 às 23:41:48 UTC.
+- Merge commit: `34432022541ed859da63231c83609c63e7f531e9`.
+- GitHub Actions #225: job `pytest` e etapa `Run tests` concluídos com sucesso no head `db602220624cd26e5a7052c5da08598d0e581cb3`.
+- Revisão automatizada Codex do head `db60222062`: concluída sem apontar problemas importantes.
+- Os mecanismos continuam isolados e não atualizam automaticamente a rede recorrente v0.2 ou a memória temporal v0.3.

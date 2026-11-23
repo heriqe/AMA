@@ -1,6 +1,6 @@
 # Roadmap do AMA
 
-**Roadmap atualizado — 2026-11-22**
+**Roadmap atualizado — 2026-11-23**
 
 O roadmap é incremental. Datas são referências, não promessas de entrega.
 
@@ -61,6 +61,8 @@ O roadmap é incremental. Datas são referências, não promessas de entrega.
 - [x] Revisão automatizada Codex do head 59d7678b concluída sem findings em 2026-11-15.
 - [x] CI #233: 143 testes aprovados no head 135451b9 (Python 3.11.18; 0,45 s).
 - [x] Revisão automatizada Codex do head 135451b9 concluída sem findings em 2026-11-21.
+- [x] CI #234: 143 testes aprovados em 0,33 s, Python 3.11.18, no head 11a5849; job pytest e etapa Run tests concluídos com sucesso.
+- [x] Revisão automatizada Codex do head 11a5849 concluída em 2026-11-22 sem findings (resumo #7079028183); isso não equivale à aprovação humana.
 - [ ] Aprovação humana e integração à main.
 
 ### Próximas versões
@@ -80,3 +82,10 @@ O roadmap é incremental. Datas são referências, não promessas de entrega.
 ## Critérios para avançar
 
 Nenhuma fase é considerada concluída apenas porque os arquivos existem. Exigir testes automatizados, documentação atualizada, limites conhecidos, revisão e evidência reproduzível de funcionamento. A v0.5 permanece proposta até a aprovação humana e integração; o sucesso de CI e a revisão automatizada não autorizam merge.
+
+
+## Auditoria de estado — 2026-11-23
+
+- A PR #28 permanece aberta, mergeable e sem aprovação humana registrada; o head verificado antes desta atualização era 11a5849. A revisão Codex desse head foi concluída sem findings em 2026-11-22.
+- GitHub Actions #234 concluiu com sucesso: **143 testes aprovados em 0,33 s**, Python 3.11.18.
+- A leitura dos metadados da branch main em 2026-11-23 retornou protected=false e protection.enabled=false; a consulta aos repository rulesets retornou uma lista vazia. O endpoint específico de proteção retornou HTTP 403, portanto seus detalhes não puderam ser consultados. Nenhuma configuração foi alterada; não integrar enquanto a proteção exigida não for restaurada manualmente e a aprovação humana não for concedida.
